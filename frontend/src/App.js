@@ -1,5 +1,9 @@
 import './App.css';
 import axios from 'axios';
+import Home from './components/Home';
+import Header from './components/Header';
+// import './index.css';
+// import './Home.css';
 
 function App() {
 
@@ -55,14 +59,18 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <h1>Hello World!</h1>
-      <button onClick={checkAPI}>Check API</button>
-      <button onClick={sendJSON}>Send JSON</button>
-      <button onClick={sendUser}>Send User to DB</button>
-      <button onClick={getUsers}>Get Users from DB</button>
-      <button onClick={clearUsers}>Clear Users in DB</button>
-    </div>
+  <>
+    <Header/>
+    <Home />
+  </>
+    // <div className="App">
+    //   <h1>Hello World!</h1>
+    //   <button onClick={checkAPI}>Check API</button>
+    //   <button onClick={sendJSON}>Send JSON</button>
+    //   <button onClick={sendUser}>Send User to DB</button>
+    //   <button onClick={getUsers}>Get Users from DB</button>
+    //   <button onClick={clearUsers}>Clear Users in DB</button>
+    // </div>
   );
 }
 

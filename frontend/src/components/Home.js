@@ -1,7 +1,7 @@
-import './App.css';
+import '../styles/Home.css';
 import React from 'react';
 
-function Hello({ name }) {
+function Home() {
   return (
     <div id="surgeons">
         <h2>Surgeons</h2>
@@ -110,4 +110,4 @@ function Hello({ name }) {
   );
 }
 
-export default Hello;
+export default Home;
