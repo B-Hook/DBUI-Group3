@@ -3,20 +3,8 @@ import axios from 'axios';
 import Home from '../Home/Home';
 import Header from '../Header/Header';
 import Login from '../Login/Login';
-import useToken from './useToken';
 import React, { useState } from 'react';
-// import './index.css';
-// import './Home.css';
 
-// function setToken(userToken) {
-//   sessionStorage.setItem('token', JSON.stringify(userToken));
-// }
-
-// function getToken() {
-//   const tokenString = localStorage.getItem('token');
-//   const userToken = JSON.parse(tokenString);
-//   return userToken?.token
-// }
 
 function App() {
 
@@ -71,17 +59,23 @@ function App() {
   //   })
   // }
 
-  const { token, setToken } = useToken();
+  const getToken = () => {
+    const tokenString = localStorage.getItem('token');
+    const userToken = JSON.parse(tokenString);
+    return userToken?.token
+  };
+  
+  const [token, setToken] = useState(getToken());
 
-  if(!token) {
+  if (!token) {
     return <Login setToken={setToken} />
   }
 
   return (
-  <>
-    <Header />
-    <Home />
-  </>
+    <>
+      <Header />
+      <Home />
+    </>
     // <div className="App">
     //   <h1>Hello World!</h1>
     //   <button onClick={checkAPI}>Check API</button>

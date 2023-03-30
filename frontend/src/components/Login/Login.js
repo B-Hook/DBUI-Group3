@@ -2,34 +2,28 @@ import React, { useState } from 'react';
 import './Login.css';
 import PropTypes from 'prop-types';
 
-async function loginUser(loginInfo) {
-
-    const req =  {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(loginInfo)
-    }
-
-    return fetch('http://localhost:8080/', req).then(res => res.json())
-}
-
-function Login( { setToken } ) {
+function Login({ setToken }) {
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();
     const [userType, setUserType] = useState();
 
     const handleSubmit = async e => {
         e.preventDefault();
-        const token = await loginUser({
-            username,
-            password,
-            userType
-        });
-        setToken(token);
+
+        const req = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify( { username, password, userType } )
+        }
+        
+        const token = await fetch('http://localhost:8080/', req).then(res => res.json())
+
+        localStorage.setItem('token', JSON.stringify(token));
+        setToken(token.token);
     }
 
-    return(
-        <div className="login-wrapper">
+    return (
+        <div>
             <div className="surgeon-login">
                 <h2>Surgeon Login</h2>
                 <form onSubmit={handleSubmit}>
@@ -70,4 +64,4 @@ export default Login;
 
 Login.propTypes = {
     setToken: PropTypes.func.isRequired
-}
+};
