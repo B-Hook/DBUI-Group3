@@ -1,0 +1,8 @@
+* {
+    box-sizing: border-box;
+}
+.surgeon-login, .admin-login{
+    display:inline;
+    float:left;
+    padding:3rem;
+}

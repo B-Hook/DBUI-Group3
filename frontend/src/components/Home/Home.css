@@ -44,7 +44,7 @@ body {
     text-align:center;
 }
 
-button{
+.button-primary{
     padding:5px;
     background-color:rgb(54, 183, 212);
     color:white;
