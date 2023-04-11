@@ -6,8 +6,8 @@ import { useContext } from 'react';
 function Header () {
     const appContext = useContext(AppContext);
     return(
-        <header>
-            <h1>Hospital</h1>
+        <header class="nav-header">
+            <h1 class="title-header">Hospital</h1>
             <span>{ appContext.userName }</span>&nbsp;
             <button onClick={() => {appContext.setUserName(undefined);
                                     appContext.setUserType(undefined);} }>Logout</button>

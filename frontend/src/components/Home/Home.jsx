@@ -8,7 +8,7 @@ function Home() {
         <Header/>
         <h2>Surgeons</h2>
       <ul class="surgeon-list">
-        <li>
+        <li class="surgeon-item">
           <h2> Braiden </h2>
           <p>
             Expertise:
@@ -41,7 +41,7 @@ function Home() {
             </li>
           </ul>
         </li>
-        <li>
+        <li class="surgeon-item">
           <h2> Jack </h2>
           <p>
           Expertise:
@@ -74,7 +74,7 @@ function Home() {
             </li>
           </ul>
         </li>
-        <li>
+        <li class="surgeon-item">
           <h2> Miles </h2>
           <p>
           Expertise:

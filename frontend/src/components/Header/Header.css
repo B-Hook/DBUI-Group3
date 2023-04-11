@@ -3,7 +3,7 @@
     padding:0;
 }
 
-header {
+.nav-header {
     position: fixed;
     background-color: rgb(54, 183, 212);
     z-index: 1;
@@ -16,22 +16,22 @@ header {
     /* align-items: baseline; */
 }
 
-h1 {
-    color: white;
-    text-align: left;
+.title-header {
+    color: Black;
+    text-align: right;
     margin: 0;
     padding-top: .5rem;
     padding-bottom: .5rem;
     padding-left: .5rem;
 }
 
-header li {
+.nav-header .header-item {
     display:inline-block;
-    margin: 0px 20px 0px 0px;
+    margin: 20px 20px 0px 0px;
     transition: 0.4s;
 }
 
-li a {
+.header-item a {
     color: white;
     text-decoration: none;
 }

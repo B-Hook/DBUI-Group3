@@ -18,8 +18,8 @@ body {
     margin:1rem;
 }
 
-.surgeon-list > li{
-    padding: 1rem;
+.surgeon-list > .surgeon-item{
+    padding: 2.5rem;
     display: block;
     border-style:solid;
     margin-bottom: 1rem;
