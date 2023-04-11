@@ -1,31 +1,45 @@
-import React, { useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import './Login.css';
-import PropTypes from 'prop-types';
+import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../AppContext";
 
-function Login({ setToken }) {
-    const [usernameS, setUserNameS] = useState();
+function Login() {
+    const [userNameS, setUserNameS] = useState();
     const [passwordS, setPasswordS] = useState();
-    const [usernameA, setUserNameA] = useState();
+    const [userNameA, setUserNameA] = useState();
     const [passwordA, setPasswordA] = useState();
     const [userType, setUserType] = useState();
+    const appContext = useContext(AppContext);
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        if(appContext.userName){
+            navigate("/");
+        }},[]);
 
     const handleSubmit = async e => {
         e.preventDefault();
 
         if (userType === "surgeon"){
 
-            console.log(usernameS);
+            // console.log(userNameS);
 
             const req = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify( { username:usernameS, password:passwordS, userType } )
+                body: JSON.stringify( { username:userNameS, password:passwordS, userType } )
             };
 
-            const token = await fetch('http://localhost:8080/', req).then(res => res.json());
+            const data = await fetch('http://localhost:8080/login', req).then(res => res.json());
+            
+            appContext.setUserName(data.userName);
+            appContext.setUserType(data.userType);
 
-            localStorage.setItem('token', JSON.stringify(token));
-            setToken(token.token);
+            // console.log(appContext.userName);
+            // localStorage.setItem('token', JSON.stringify(token));
+            // setToken(token.token);
+
+            navigate('/');
 
         }
         else{
@@ -33,13 +47,18 @@ function Login({ setToken }) {
             const req = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify( { username:usernameA, password:passwordA, userType } )
+                body: JSON.stringify( { username:userNameA, password:passwordA, userType } )
             };
 
-            const token = await fetch('http://localhost:8080/', req).then(res => res.json());
+            const data = await fetch('http://localhost:8080/login', req).then(res => res.json());
 
-            localStorage.setItem('token', JSON.stringify(token));
-            setToken(token.token);
+            appContext.setUserName(data.userName);
+            appContext.setUserType(data.userType);
+
+            // localStorage.setItem('token', JSON.stringify(token));
+            // setToken(token.token);
+
+            navigate('/');
 
         }
         
@@ -85,6 +104,6 @@ function Login({ setToken }) {
 
 export default Login;
 
-Login.propTypes = {
-    setToken: PropTypes.func.isRequired
-};
+// Login.propTypes = {
+//     setToken: PropTypes.func.isRequired
+// };

@@ -1,11 +1,16 @@
 import './Header.css';
 import React from 'react';
-
+import { AppContext } from "../../AppContext";
+import { useContext } from 'react';
 
 function Header () {
+    const appContext = useContext(AppContext);
     return(
         <header>
             <h1>Hospital</h1>
+            <span>{ appContext.userName }</span>&nbsp;
+            <button onClick={() => {appContext.setUserName(undefined);
+                                    appContext.setUserType(undefined);} }>Logout</button>
             <nav>
                 <ul class="header-list">
                     <li class="header-item">

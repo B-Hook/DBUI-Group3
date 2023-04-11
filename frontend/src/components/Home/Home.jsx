@@ -1,9 +1,11 @@
 import './Home.css';
 import React from 'react';
+import Header from "../Header/Header";
 
 function Home() {
   return (
     <div id="surgeons">
+        <Header/>
         <h2>Surgeons</h2>
       <ul class="surgeon-list">
         <li>
