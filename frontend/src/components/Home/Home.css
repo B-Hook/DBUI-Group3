@@ -7,12 +7,12 @@ p {
   font-family: sans-serif;
 }
 
-body {
+/* body {
     font-family: 'Source Sans Pro', sans-serif;
     margin: 0;
     margin-top: 4rem;
     padding: .5rem;
-}
+} */
 
 .surgeon-list{
     margin:1rem;
