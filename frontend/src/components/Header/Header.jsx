@@ -14,7 +14,10 @@ function Header () {
             <nav>
                 <ul class="header-list">
                     <li class="header-item">
-                        <a href="#"> Surgeries </a>
+                        <a href="/surgery"> View Surgery </a>
+                    </li>
+                    <li class="header-item">
+                        <a href="/new-surgery"> New Surgery </a>
                     </li>
                     <li class="header-item">
                         <a href="#"> Surgeons </a>

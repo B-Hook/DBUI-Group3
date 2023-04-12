@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams} from "react-router-dom";
 import { TextField, SelectField, TextAreaField } from "./common";
 
 export const Surgery = () => {
@@ -67,6 +67,18 @@ export const Surgery = () => {
         return <>Loading...</>;
     }
 
+    const header = () => {
+        if (location.pathname === "/new-surgery"){
+            return <h1>Surgery - New </h1>
+        }
+        else if (location.pathname === "/surgery"){
+            return <h1>Surgery - View </h1>
+        }
+        else if (location.pathname === "/surgery/edit"){
+            return <h1>Surgery - Edit </h1>
+        }
+    }
+
     const buttonSetup = () => {
 
         if (location.pathname === "/new-surgery"){
@@ -96,12 +108,13 @@ export const Surgery = () => {
                         <div className="col">
                             <button type="button"
                                 className="btn btn-danger btn-lg col-12 mt-4"
-                                onClick="window.history.back()">Cancel</button>
+                                onClick={() => navigate(-1)}>Cancel</button>
                         </div>
                         <div className="col">
                             <button type="button"
                                 className="btn btn-info btn-lg col-12 mt-4"
-                                onClick={() => {handleSave();}}>Save</button>
+                                onClick={() => {handleSave();
+                                                navigate(-1);}}>Save</button>
                         </div>
                     </div>
         }
@@ -109,7 +122,7 @@ export const Surgery = () => {
 
     return <div class="card bg-dark text-info rounded-0" style={{height: "100vh"}}>
         <div class="card-header"> 
-            <h1>Surgery</h1>
+            {header()}
         </div>
         <div class="card-body">
             <fieldset disabled={location.pathname === "/surgery"}>
