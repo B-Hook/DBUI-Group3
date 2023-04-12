@@ -1,7 +1,7 @@
 export const SelectField = ({ id, label, value, setValue, options, optionValueKey, optionLabelKey, hideBlankOption }) => {
     return <>
         <div className="form-group mb-3">
-            <label htmlFor={id}>{label}</label>
+            <label className="pb-2" htmlFor={id}>{label}</label>
             <select id={id}
                 name={id}
                 value={value}

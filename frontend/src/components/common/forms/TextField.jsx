@@ -11,7 +11,7 @@ export const TextField = ({id, label, value, setValue, isFocused}) => {
 
     return <>
         <div className="form-group mb-3">
-            <label htmlFor={ id }>{label}</label>
+            <label className="pb-2" htmlFor={ id }>{label}</label>
             <input id={id} name={id}
                 className="form-control"
                 type="text"

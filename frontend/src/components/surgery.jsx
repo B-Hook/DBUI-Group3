@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams} from "react-router-dom";
 import { TextField, SelectField, TextAreaField } from "./common";
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 export const Surgery = () => {
 
@@ -120,11 +121,16 @@ export const Surgery = () => {
         }
     }
 
-    return <div class="card bg-dark text-info rounded-0" style={{height: "100vh"}}>
+    return <div className="card bg-dark text-info rounded-0">
+        <HelmetProvider>
+            <Helmet>
+                <style>{'body { background-color: var(--bs-dark); }'}</style>
+            </Helmet>
+        </HelmetProvider>
         <div class="card-header"> 
             {header()}
         </div>
-        <div class="card-body">
+        <div className="card-body">
             <fieldset disabled={location.pathname === "/surgery"}>
                 <div className="row align-items-start">
                     <div className="col">
@@ -176,7 +182,7 @@ export const Surgery = () => {
                     </div>
                 </div>
                 {surgery.patientName && surgery.specialization && surgery.staffNum && surgery.roomNum && surgery.weekNum && surgery.day && surgery.time?
-                    <div className="col-2">
+                    <div className="col-auto">
                         <SelectField id="surgeon"
                                     label="Surgeon"
                                     value={surgery.surgeon}
