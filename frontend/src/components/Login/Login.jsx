@@ -28,12 +28,12 @@ function Login() {
             const req = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify( { userName:userNameS, password:passwordS, userType } )
+                body: JSON.stringify( { username:userNameS, password:passwordS, userType } )
             };
 
             const data = await fetch('http://localhost:8080/login', req).then(res => res.json());
             
-            appContext.setUserName(data.userName);
+            appContext.setUserName(data.username);
             appContext.setUserType(data.userType);
 
             // console.log(appContext.userName);
@@ -48,12 +48,12 @@ function Login() {
             const req = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify( { userName:userNameA, password:passwordA, userType } )
+                body: JSON.stringify( { username:userNameA, password:passwordA, userType } )
             };
 
             const data = await fetch('http://localhost:8080/login', req).then(res => res.json());
 
-            appContext.setUserName(data.userName);
+            appContext.setUserName(data.username);
             appContext.setUserType(data.userType);
 
             // localStorage.setItem('token', JSON.stringify(token));

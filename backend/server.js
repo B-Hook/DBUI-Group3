@@ -38,7 +38,7 @@ connection.connect()
 // });
 
 app.post('/login', (req, res) => {
-    connection.query(`SELECT * FROM users WHERE username = '${req.body.userName}' AND password = '${req.body.password}'`, (err, rows, fields) => {
+    connection.query(`SELECT * FROM users WHERE username = '${req.body.username}' AND password = '${req.body.password}'`, (err, rows, fields) => {
       if (err) {
         return res.status(500).json({ error: 'An error occurred during the login process' });
       }
@@ -48,7 +48,7 @@ app.post('/login', (req, res) => {
       }
   
       // Perform login actions, such as setting a session or issuing a token
-      res.status(200).json({ userName: req.body.userName,
+      res.status(200).json({ username: req.body.username,
                             userType: req.body.userType});
     });
   });
