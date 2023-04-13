@@ -28,7 +28,7 @@ function Login() {
             const req = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify( { username:userNameS, password:passwordS, userType } )
+                body: JSON.stringify( { userName:userNameS, password:passwordS, userType } )
             };
 
             const data = await fetch('http://localhost:8080/login', req).then(res => res.json());
@@ -48,7 +48,7 @@ function Login() {
             const req = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify( { username:userNameA, password:passwordA, userType } )
+                body: JSON.stringify( { userName:userNameA, password:passwordA, userType } )
             };
 
             const data = await fetch('http://localhost:8080/login', req).then(res => res.json());
@@ -110,11 +110,11 @@ function Login() {
                                 <label className=" form-label fs-4" htmlFor="inputUserNameS">
                                     Username
                                 </label>
-                                <input id="inputUserNameS"className="form-control col-auto mb-2"type="text" onChange={e => setUserNameA(e.target.value)} />
+                                <input id="inputUserNameA"className="form-control col-auto mb-2"type="text" onChange={e => setUserNameA(e.target.value)} />
                                 <label className="col-auto form-label fs-4" htmlFor="inputPasswordS">
                                     Password
                                 </label>
-                                <input id="inputPasswordS"className="form-control col-auto mb-3"type="password" onChange={e => setPasswordA(e.target.value)} />
+                                <input id="inputPasswordA"className="form-control col-auto mb-3"type="password" onChange={e => setPasswordA(e.target.value)} />
                                 <div>
                                     <button type="submit" className="btn bg-info text-dark btn-lg" onClick={e => setUserType("surgeon")}>Submit</button>
                                 </div>
