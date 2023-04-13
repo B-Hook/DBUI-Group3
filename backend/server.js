@@ -9,6 +9,17 @@ app.use(cors()) // This has to be before any routes
 // Enable JSON parsing
 app.use(express.json())
 
+// Connect to mysql
+const mysql = require('mysql')
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'CoolPasswordThanks',
+  database: 'DBUI'
+})
+
+connection.connect()
+
 // app.post('/login', (req, res) => {
 //     // check if the username and password exist in the database
 //     // if they do send back the token below
@@ -43,17 +54,6 @@ app.post('/login', (req, res) => {
   });
 
 app.listen(8080, () => console.log('API is running on http://localhost:8080/'));
-
-// // Connect to mysql
-// const mysql = require('mysql')
-// const connection = mysql.createConnection({
-//   host: 'localhost',
-//   user: 'root',
-//   password: 'CoolPasswordThanks',
-//   database: 'DBUI'
-// })
-
-// connection.connect()
 
 // // API routes
 // app.get('/', (req, res) => {
