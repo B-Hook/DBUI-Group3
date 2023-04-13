@@ -1,0 +1,45 @@
+* {
+    box-sizing: border-box;
+    padding:0;
+}
+
+.nav-header {
+    position: fixed;
+    background-color: rgb(54, 183, 212);
+    z-index: 1;
+    top: 0;
+    right: 0;
+    left: 0;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    /* align-items: baseline; */
+}
+
+.title-header {
+    color: Black;
+    text-align: right;
+    margin: 0;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    padding-left: .5rem;
+}
+
+.nav-header .header-item {
+    display:inline-block;
+    margin: 20px 20px 0px 0px;
+    transition: 0.4s;
+}
+
+.header-item a {
+    color: white;
+    text-decoration: none;
+}
+
+.header-list:hover .header-item{
+    opacity: 0.5;
+}
+
+.header-list .header-item:hover{
+    opacity: 1;
+}
