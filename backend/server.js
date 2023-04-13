@@ -85,7 +85,7 @@ app.put('/users/clear', (req, res) => {
 // Start server
 app.listen(port, () => {
 
-    fs.readFile("../DBUI.session.sql", (err, buff) => {
+    fs.readFile("DBUI.session.sql", (err, buff) => {
         // if any error
         if (err) {
             console.error(err);
