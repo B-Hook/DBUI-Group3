@@ -16,8 +16,10 @@ function App() {
   const user = {
     "first": "Hayden",
     "last": "Center",
-    "age": 22,
-    "admin": true
+    "specialty": "",
+    "type": "admin",
+    "username": "Usernm",
+    "password": "passwrd"
   }
 
   const sendJSON = () => {

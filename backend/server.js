@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const port = 8000
 
+const fs = require('fs');
+
 // Enable Cross-Origin Resource Sharing
 const cors = require('cors')
 app.use(cors()) // This has to be before any routes
@@ -15,7 +17,8 @@ const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: 'CoolPasswordThanks',
-  database: 'DBUI'
+  database: 'DBUI',
+  multipleStatements: true
 })
 
 connection.connect()
@@ -29,12 +32,11 @@ app.put('/parse', (req, res) => {
     console.log(req.body)
     
     try {
-        const { first, last, age, admin } = req.body
+        const { first, last, specialty, type, username, password } = req.body
         const name = `${first} ${last}`
-        const isAdmin = admin ? "is an admin" : "is not an admin"
 
         res.status(200)
-        res.send(`${name} is ${age} years old and ${isAdmin}`)
+        res.send(`${name} is the users name`)
     } catch (err) {
         console.log(err)
     }
@@ -51,8 +53,8 @@ app.get('/db', (req, res) => {
 })
 
 app.post('/user', (req, res) => {
-    const { first, last, age, admin } = req.body
-    const query = `INSERT INTO users (first_name, last_name, age, admin) VALUES ('${first}', '${last}', ${age}, ${admin})`
+    const { first, last, specialty, type, username, password} = req.body
+    const query = `INSERT INTO users (first_name, last_name, specialty, type, username, password) VALUES ('${first}', '${last}', '${specialty}', '${type}', '${username}', '${password}')`
     connection.query(query, (err, rows, fields) => {
         if (err) throw err
 
@@ -82,5 +84,18 @@ app.put('/users/clear', (req, res) => {
 
 // Start server
 app.listen(port, () => {
+
+    fs.readFile("../DBUI.session.sql", (err, buff) => {
+        // if any error
+        if (err) {
+            console.error(err);
+            return;
+        }
+        
+        // otherwise log contents
+        console.log(buff.toString());
+
+    });
+
     console.log(`Example app listening on port ${port}`)
 })
