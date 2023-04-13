@@ -99,3 +99,19 @@ app.listen(port, () => {
 
     console.log(`Example app listening on port ${port}`)
 })
+
+app.post('/login', (req, res) => {
+    connection.query(`SELECT * FROM users WHERE username = '${req.body.userName}' AND password = '${req.body.password}'`, (err, rows, fields) => {
+      if (err) {
+        return res.status(500).json({ error: 'An error occurred during the login process' });
+      }
+  
+      if (rows.length === 0) {
+        return res.status(401).json({ error: 'Invalid username or password' });
+      }
+  
+      // Perform login actions, such as setting a session or issuing a token
+      res.status(200).json({ userName: req.body.userName,
+                            userType: req.body.userType});
+    });
+  });
