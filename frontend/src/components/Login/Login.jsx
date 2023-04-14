@@ -1,96 +1,7 @@
-import { useContext, useState, useEffect } from 'react';
-import './Login.css';
-import { useNavigate } from "react-router-dom";
-import { AppContext } from "../../AppContext";
+import LoginContainer from "./LoginContainer"
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 function Login() {
-    const [userNameS, setUserNameS] = useState();
-    const [passwordS, setPasswordS] = useState();
-    const [userNameA, setUserNameA] = useState();
-    const [passwordA, setPasswordA] = useState();
-    const [userType, setUserType] = useState();
-    const appContext = useContext(AppContext);
-    const navigate = useNavigate();
-    const [validS, setValidS] = useState(true);
-    const [validA, setValidA] = useState(true);
-
-    useEffect(()=>{
-        if(appContext.userName){
-            navigate("/");
-        }},[]);
-
-    const handleSubmit = async e => {
-        e.preventDefault();
-
-        if (userType === "surgeon"){
-
-            // console.log(userNameS);
-
-            const req = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify( { username:userNameS, password:passwordS, userType } )
-            };
-
-            try{
-
-                const data = await fetch('http://localhost:8080/login', req)
-
-                if (!data.ok) {
-                    throw new Error(`This is an HTTP error: The status is ${data.status}`);
-                }
-
-                let actualData = await data.json();
-                appContext.setUserName(actualData.username);
-                appContext.setUserType(actualData.userType);
-                navigate("/");
-            } catch (err) {
-                console.log(err.message);
-                setValidS(false);
-                document.getElementById("inputPasswordS").classList.add("is-invalid");
-                document.getElementById("inputPasswordS").classList.remove("mb-3");
-                document.getElementById("inputPasswordS").classList.add("mb-2");
-                document.getElementById("buttonS").classList.remove("mt-4");
-
-            }
-
-        }
-        else{
-
-            const req = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify( { username:userNameA, password:passwordA, userType } )
-            };
-
-            try{
-
-                const data = await fetch('http://localhost:8080/login', req)
-
-                if (!data.ok) {
-                    throw new Error(`This is an HTTP error: The status is ${data.status}`);
-                }
-
-                let actualData = await data.json();
-                appContext.setUserName(actualData.username);
-                appContext.setUserType(actualData.userType);
-                navigate("/");
-            } catch (err) {
-                console.log(err.message);
-                setValidA(false);
-                document.getElementById("inputPasswordA").classList.add("is-invalid");
-                document.getElementById("inputPasswordA").classList.remove("mb-3");
-                document.getElementById("inputPasswordA").classList.add("mb-2");
-                document.getElementById("buttonA").classList.remove("mt-4");
-            }
-
-        }
-        
-    }
-
-    // document.body.style = 'background: red;';
-
     return (
         <div>
             <header className="m-3 text-dark fs-1">
@@ -103,54 +14,10 @@ function Login() {
             </HelmetProvider>
             <div className="row w-100 m-0">
                 <div className="col m-3 p-0">
-                    <div className="card mt-5 text-start bg-dark text-info p-5">
-                        <div className="card-header"> 
-                            <h2>Surgeon Login</h2>
-                        </div>
-                        <div className="card-body align-items-center">
-                            <form onSubmit={handleSubmit}>
-                                <label className=" form-label fs-4" htmlFor="inputUserNameS">
-                                    Username
-                                </label>
-                                <input id="inputUserNameS"className="form-control col-auto mb-4"type="text" onChange={e => setUserNameS(e.target.value)} />
-                                <label className="col-auto form-label fs-4" htmlFor="inputPasswordS">
-                                    Password
-                                </label>
-                                <input id="inputPasswordS" className="form-control col-auto mb-3" type="password" onChange={e => setPasswordS(e.target.value)} />
-                                {validS?<></>:
-                                <div id="inputPasswordSFeedback" className="text-danger mb-2">
-                                        Incorrect Username or Password
-                                </div>
-                                }
-                                <button id="buttonS" type="submit" className="btn bg-info text-dark btn-lg mt-4" onClick={e => setUserType("surgeon")}>Submit</button>
-                            </form>
-                        </div>
-                    </div>
+                    <LoginContainer type="Surgeon"/>
                 </div>
                 <div className="col m-3 p-0">
-                    <div className="card mt-5 text-start bg-dark text-info p-5">
-                        <div className="card-header"> 
-                            <h2>Admin Login</h2>
-                        </div>
-                        <div className="card-body align-items-center">
-                            <form onSubmit={handleSubmit}>
-                                <label className=" form-label fs-4" htmlFor="inputUserNameA">
-                                    Username
-                                </label>
-                                <input id="inputUserNameA"className="form-control col-auto mb-4"type="text" onChange={e => setUserNameA(e.target.value)} />
-                                <label className="col-auto form-label fs-4" htmlFor="inputPasswordA">
-                                    Password
-                                </label>
-                                <input id="inputPasswordA" className="form-control col-auto mb-3" type="password" onChange={e => setPasswordA(e.target.value)} />
-                                {validA?<></>:
-                                <div id="inputPasswordAFeedback" className="text-danger mb-2">
-                                        Incorrect Username or Password
-                                </div>
-                                }
-                                <button id="buttonA" type="submit" className="btn bg-info text-dark btn-lg mt-4" onClick={e => setUserType("admin")}>Submit</button>
-                            </form>
-                        </div>
-                    </div>
+                    <LoginContainer type="Admin"/>
                 </div>
             </div>
         </div>
@@ -158,7 +25,3 @@ function Login() {
 }
 
 export default Login;
-
-// Login.propTypes = {
-//     setToken: PropTypes.func.isRequired
-// };
