@@ -41,29 +41,29 @@ app.post('/login', (req, res) => {
     });
   });
 });
+app.get('/surgeons', (req, res) => {
+  connection.query(`SELECT * FROM users WHERE type = 'surgeon'`, (err, rows, fields) => {
+    if (err) throw err;
 
-app.get('/users', (req, res) => {
-     connection.query(`SELECT * FROM users`, (err, rows, fields) => {
-         if (err) throw err
-
-        res.status(200)
-        res.send(rows)
-    })
+    res.status(200);
+    res.send(rows);
+  });
 });
-app.get('/users/:id', (req, res) => {
-  // Your code to fetch a specific user by ID
-  connection.query(`SELECT * FROM users WHERE id = ${req.params.id}`, (err, rows, fields) => {
-    if (err) throw err
 
-    res.status(200)
-    res.send(rows)
-  })
+app.get('/surgeons/:id', (req, res) => {
+  connection.query(`SELECT * FROM users WHERE id = ${req.params.id} AND type = 'surgeon'`, (err, rows, fields) => {
+    if (err) throw err;
+
+    res.status(200);
+    res.send(rows);
+  });
 });
-app.post('/users', (req, res) => {
+
+app.post('/surgeons', (req, res) => {
   const { first_name, last_name, username, password, type, specialty } = req.body;
 
   // Check if the user type is valid
-  const validUserTypes = ['surgeon', 'admin'];
+  const validUserTypes = ['surgeon'];
   if (!validUserTypes.includes(type)) {
     return res.status(400).json({ error: 'Invalid user type' });
   }
@@ -76,18 +76,18 @@ app.post('/users', (req, res) => {
 
   connection.query(query, [first_name, last_name, username, password, type, specialty], (err, result) => {
     if (err) {
-      return res.status(500).json({ error: 'An error occurred while creating the user' });
+      return res.status(500).json({ error: 'An error occurred while creating the surgeon' });
     }
 
-    res.status(201).json({ message: 'User created successfully', userId: result.insertId });
+    res.status(200).json({ message: 'Surgeon created successfully', userId: result.insertId });
   });
 });
 
-app.put('/users/:id', (req, res) => {
+app.put('/surgeons/:id', (req, res) => {
   const { first_name, last_name, username, password, type, specialty } = req.body;
   const userId = req.params.id;
 
-  const validUserTypes = ['surgeon', 'admin'];
+  const validUserTypes = ['surgeon'];
   if (!validUserTypes.includes(type)) {
     return res.status(400).json({ error: 'Invalid user type' });
   }
@@ -95,37 +95,38 @@ app.put('/users/:id', (req, res) => {
   const query = `
     UPDATE users
     SET first_name = ?, last_name = ?, username = ?, password = ?, type = ?, specialty = ?
-    WHERE id = ?
+    WHERE id = ? AND type = 'surgeon'
   `;
 
   connection.query(query, [first_name, last_name, username, password, type, specialty, userId], (err, result) => {
     if (err) {
-      return res.status(500).json({ error: 'An error occurred while updating the user' });
+      return res.status(500).json({ error: 'An error occurred while updating the surgeon' });
     }
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Surgeon not found' });
     }
 
-    res.status(200).json({ message: 'User updated successfully' });
+    res.status(200).json({ message: 'Surgeon updated successfully' });
   });
 });
 
-app.delete('/users/:id', (req, res) => {
+app.delete('/surgeons/:id', (req, res) => {
   const userId = req.params.id;
 
-  connection.query('DELETE FROM users WHERE id = ?', [userId], (err, result) => {
+  connection.query('DELETE FROM users WHERE id = ? AND type = "surgeon"', [userId], (err, result) => {
     if (err) {
-      return res.status(500).json({ error: 'An error occurred while deleting the user' });
+      return res.status(500).json({ error: 'An error occurred while deleting the surgeon' });
     }
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Surgeon not found' });
     }
 
-    res.status(200).json({ message: 'User deleted successfully' });
+    res.status(200).json({ message: 'Surgeon deleted successfully' });
   });
 });
+
 
 app.get('/surgeries', (req, res) => {
   connection.query('SELECT * FROM surgeries', (err, rows, fields) => {
@@ -166,7 +167,7 @@ app.post('/surgeries', (req, res) => {
       return res.status(500).json({ error: 'An error occurred while creating the surgery' });
     }
 
-    res.status(201).json({ message: 'Surgery created successfully', surgeryId: result.insertId });
+    res.status(200).json({ message: 'Surgery created successfully', surgeryId: result.insertId });
   });
 });
 
