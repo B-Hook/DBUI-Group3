@@ -31,46 +31,17 @@ app.post('/login', (req, res) => {
       return res.status(401).json({ error: 'Invalid username or password' });
     }
 
+    // Get the user type from the query result
+    const userType = rows[0].type;
+
     // Perform login actions, such as setting a session or issuing a token
     res.status(200).json({
       username: req.body.username,
-      userType: req.body.userType
+      userType: userType
     });
   });
-}); 
-
-
-// Surgeon login route
-app.post('/login/surgeon', (req, res) => {
-  connection.query(`SELECT * FROM users WHERE username = ? AND password = ? AND type = 'surgeon'`, [req.body.username, req.body.password], (err, rows, fields) => {
-    if (err) {
-      return res.status(500).json({ error: 'An error occurred during the login process' });
-    }
-
-    if (rows.length === 0) {
-      return res.status(401).json({ error: 'Invalid username or password' });
-    }
-
-    // Perform login actions, such as setting a session or issuing a token
-    res.status(200).json({ username: req.body.username, userType: 'surgeon' });
-  });
 });
 
-// Admin login route
-app.post('/login/admin', (req, res) => {
-  connection.query(`SELECT * FROM users WHERE username = ? AND password = ? AND type = 'admin'`, [req.body.username, req.body.password], (err, rows, fields) => {
-    if (err) {
-      return res.status(500).json({ error: 'An error occurred during the login process' });
-    }
-
-    if (rows.length === 0) {
-      return res.status(401).json({ error: 'Invalid username or password' });
-    }
-
-    // Perform login actions, such as setting a session or issuing a token
-    res.status(200).json({ username: req.body.username, userType: 'admin' });
-  });
-});
 app.get('/users', (req, res) => {
      connection.query(`SELECT * FROM users`, (err, rows, fields) => {
          if (err) throw err

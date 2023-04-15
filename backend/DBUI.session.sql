@@ -28,7 +28,7 @@ CREATE TABLE surgeries(
     duration                time NOT NULL,
     location                VARCHAR(255) NOT NULL,
     specialty               VARCHAR(255) NOT NULL,
-    CONSTRAINT fk_surgeon   FOREIGN KEY (surgeon_id) REFERENCES users(id),
+    CONSTRAINT fk_surgeon   FOREIGN KEY (surgeon_id) REFERENCES users(id)
 );
 
 INSERT INTO surgeries (surgeon_id, patient_name, support_staff_number, date, time, duration, location, specialty)
