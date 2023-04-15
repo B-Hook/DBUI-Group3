@@ -27,15 +27,15 @@ function LoginContainer({type}) {
 
         try{
 
-            const data = await fetch('http://localhost:8080/login', req)
+            const res = await fetch('http://localhost:8080/login', req)
 
-            if (!data.ok) {
-                throw new Error(`This is an HTTP error: The status is ${data.status}`);
+            if (!res.ok) {
+                throw new Error(`This is an HTTP error: The status is ${res.status}`);
             }
-
-            let actualData = await data.json();
-            appContext.setUserName(actualData.username);
-            appContext.setUserType(actualData.userType);
+            
+            let data = await res.json();
+            appContext.setUserName(data.username);
+            appContext.setUserType(data.userType);
             navigate("/");
         } catch (err) {
             console.log(err.message);

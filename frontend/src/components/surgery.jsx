@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams} from "react-router-dom";
 import { TextField, SelectField, TextAreaField } from "./common";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import _ from 'underscore';
 
 export const Surgery = () => {
 
@@ -28,10 +29,39 @@ export const Surgery = () => {
         "Eye",
         "Heart",
         "Lungs",
-        "Muscle"
+        "Muscle",
+        "Rheumatology",
+        "Dermatology",
+        "Cardiology"
     ];
 
     const [ surgery, setSurgery ] = useState(undefined);
+
+    const [ surgeons, setSurgeons ] = useState([]);
+
+    useEffect(() =>{
+
+
+        fetch('http://localhost:8080/surgeons').then(async res => {
+    
+        if (!res.ok) {
+            throw new Error(`This is an HTTP error: The status is ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        const newData = data.map((surgeon) => {return { ...surgeon, full_name: `${surgeon.first_name} ${surgeon.last_name}`}});
+        newData.sort((a,b) => (a.last_name > b.last_name) ? 1 : ((b.last_name > a.last_name) ? -1 : 0))
+
+        setSurgeons(newData);
+
+        })
+        .catch(error => {
+            console.error('Surgeons do not exist!', error);
+        });
+    },[])
+
+    console.log(surgery);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -41,23 +71,71 @@ export const Surgery = () => {
 
     const mergeSurgery = delta => setSurgery({ ...surgery, ...delta });
 
-    const handleSave = () => { /*addSurgery(surgery).then(x => navigate('/'));*/};
+    const handleSave = () =>{
+
+        const req = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(surgery)
+        };
+
+        console.log(req.body);
+
+        fetch('http://localhost:8080/surgeries', req).then(async res => {
+    
+        if (!res.ok) {
+            throw new Error(`The status is ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        setSurgery(data)
+
+        })
+        .catch(error => {
+            console.error('Could not save surgery', error);
+            navigate('/');
+        });
+
+    };
+
+    const handleEdit = async () => { 
+
+        // need put route for surgery in back end to do.
+
+        const req = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify( {  } )
+        };
+        
+        
+        
+        
+        /*addSurgery(surgery).then(x => navigate('/'));*/};
 
     useEffect(() => {
-        if (location.pathname === "/surgery" || location.pathname ===  "/surgery/edit") {
+        if (location.pathname === `/surgeries/${params.id}` || location.pathname ===  `/surgeries/${params.id}/edit`) {
             //getSurgeryById(params.suergeryId).then(x => setSurgery(x));
-            console.log("Hiiiiii")
-            setSurgery({
-                patientName:"Bob",
-                specialization:"Bone",
-                staffNum:"5",
-                roomNum:"B8",
-                weekNum:"1",
-                day:"Tuesday",
-                time:"Afternoon",
-                surgeon:"Braiden",
-                notes:"Bob broke his leg"
+
+            console.log("HIIIII")
+            
+            fetch(`http://localhost:8080/surgeries/${params.id}`)
+            .then(async res => {
+    
+                if (!res.ok) {
+                    throw new Error(`The status is ${res.status}`);
+                }
+
+                const data = await res.json();
+
+                setSurgery(data)
+
             })
+            .catch(error => {
+                console.error('Surgery ID does not exist!', error);
+                navigate('/');
+            });
             //setSurgery({ });
         } else {
             setSurgery({ });
@@ -72,10 +150,10 @@ export const Surgery = () => {
         if (location.pathname === "/new-surgery"){
             return <h1>Surgery - New </h1>
         }
-        else if (location.pathname === "/surgery"){
+        else if (location.pathname === `/surgeries/${params.id}`){
             return <h1>Surgery - View </h1>
         }
-        else if (location.pathname === "/surgery/edit"){
+        else if (location.pathname === `/surgeries/${params.id}/edit`){
             return <h1>Surgery - Edit </h1>
         }
     }
@@ -88,23 +166,21 @@ export const Surgery = () => {
                     onClick={() => {handleSave();
                                     navigate('/')}}>Create Surgery</button>
         }
-        else if (location.pathname === "/surgery") {
+        else if (location.pathname === `/surgeries/${params.id}`) {
             return <div className="row align-items-start">
                         <div className="col">
                             <button type="button"
                                 className="btn btn-secondary btn-lg col-12 mt-4"
-                                onClick={() => {handleSave();
-                                                navigate('/')}}>Return To Home</button>
+                                onClick={() => {navigate('/')}}>Return To Home</button>
                         </div>
                         <div className="col">
                             <button type="button"
                                 className="btn btn-info btn-lg col-12 mt-4"
-                                onClick={() => {handleSave();
-                                                navigate('edit')}}>Edit</button>
+                                onClick={() => {navigate('edit')}}>Edit</button>
                         </div>
                     </div>
         }
-        else if (location.pathname === "/surgery/edit"){
+        else if (location.pathname === `/surgeries/${params.id}/edit`){
             return <div className="row align-items-start">
                         <div className="col">
                             <button type="button"
@@ -114,7 +190,8 @@ export const Surgery = () => {
                         <div className="col">
                             <button type="button"
                                 className="btn btn-info btn-lg col-12 mt-4"
-                                onClick={() => {handleSave();
+                                onClick={() => {console.log(surgery);
+                                                handleSave();
                                                 navigate(-1);}}>Save</button>
                         </div>
                     </div>
@@ -131,63 +208,70 @@ export const Surgery = () => {
             {header()}
         </div>
         <div className="card-body">
-            <fieldset disabled={location.pathname === "/surgery"}>
+            <fieldset disabled={location.pathname === `/surgeries/${params.id}`}>
                 <div className="row align-items-start">
                     <div className="col">
                     <TextField id="patientName"
                                 label="Patient Name"
-                                value={surgery.patientName}
-                                setValue={ patientName => mergeSurgery({ patientName })} />
+                                value={surgery.patient_name}
+                                setValue={ patient_name => mergeSurgery({ patient_name })} />
                     </div>
                     <div className="col">
                     <SelectField id="specialization"
                                 label="Specialization"
-                                value={surgery.specialization}
-                                setValue={specialization => mergeSurgery({ specialization })}
+                                value={surgery.specialty}
+                                setValue={specialty => mergeSurgery({ specialty })}
                                 options={specializations} />
                     </div>
                     <div className="col">
                         <TextField id="staffNum"
                                     label="Number of Staff Members"
-                                    value={surgery.staffNum}
-                                    setValue={staffNum => mergeSurgery({ staffNum })} />
+                                    value={surgery.staff_num}
+                                    setValue={staff_num => mergeSurgery({ staff_num })} />
                     </div>
                 </div>
                 <div className="row align-items-start">
                     <div className="col">
                         <TextField id="roomNum"
                                     label="Room"
-                                    value={surgery.roomNum}
-                                    setValue={roomNum => mergeSurgery({ roomNum })} />
+                                    value={surgery.room_num}
+                                    setValue={room_num => mergeSurgery({ room_num })} />
                     </div>
                     <div className="col">
-                        <TextField id="weekNum"
-                                    label="Week"
-                                    value={surgery.weekNum}
-                                    setValue={weekNum => mergeSurgery({ weekNum })} />
+                        <TextField id="month"
+                                    label="Month"
+                                    value={surgery.month}
+                                    setValue={month => mergeSurgery({ month })} />
                     </div>
                     <div className="col">
-                        <SelectField id="day"
+                        <TextField id="day"
                                     label="Day"
                                     value={surgery.day}
-                                    setValue={day => mergeSurgery({ day })}
-                                    options={days} />
+                                    setValue={day => mergeSurgery({ day })} />
                     </div>
                     <div className="col">
                         <SelectField id="time"
-                                    label="Time"
+                                    label="Operation Time"
                                     value={surgery.time}
                                     setValue={time => mergeSurgery({ time })}
                                     options={times} />
                     </div>
+                    <div className="col">
+                        <TextField id="duration"
+                                    label="Duration (in minutes)"
+                                    value={surgery.duration}
+                                    setValue={duration => mergeSurgery({ duration })}/>
+                    </div>
                 </div>
-                {surgery.patientName && surgery.specialization && surgery.staffNum && surgery.roomNum && surgery.weekNum && surgery.day && surgery.time?
+                {surgery.patient_name && surgery.specialty && surgery.staff_num && surgery.room_num && surgery.month && surgery.day && surgery.time && surgery.duration?
                     <div className="col-auto">
                         <SelectField id="surgeon"
                                     label="Surgeon"
-                                    value={surgery.surgeon}
-                                    setValue={surgeon => mergeSurgery({ surgeon })}
-                                    options={["Braiden"]} />
+                                    value={surgery.surgeon_id}
+                                    setValue={surgeon_id => mergeSurgery({ surgeon_id })}
+                                    options={surgeons}
+                                    optionValueKey="id"
+                                    optionLabelKey="full_name"/>
                     </div>
                     :<div className="p-3 mb-3 fs-6 bg-info text-dark rounded">
                         Enter the information above to select a surgeon!
@@ -200,5 +284,5 @@ export const Surgery = () => {
             </fieldset>
             {buttonSetup()}
         </div>
-    </div>;
+    </div>
 }
