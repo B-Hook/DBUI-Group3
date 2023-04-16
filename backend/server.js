@@ -22,7 +22,7 @@ connection.connect()
 
 
 app.post('/login', (req, res) => {
-  connection.query(`SELECT * FROM users WHERE username = '${req.body.username}' AND password = '${req.body.password}'`, (err, rows, fields) => {
+  connection.query(`SELECT * FROM users WHERE username = '${req.body.username}' AND password = '${req.body.password}' AND type = '${req.body.usertype}'`, (err, rows, fields) => {
     if (err) {
       return res.status(500).json({ error: 'An error occurred during the login process' });
     }
@@ -157,6 +157,8 @@ app.get('/surgeries/:id', (req, res) => {
 app.post('/surgeries', (req, res) => {
   const { surgeon_id, patient_name, support_staff_number, date, time, duration, location, specialty } = req.body;
 
+  const status = "pending";
+  
   const query = `
     INSERT INTO surgeries (surgeon_id, patient_name, support_staff_number, date, time, duration, location, specialty)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
