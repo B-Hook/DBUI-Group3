@@ -51,7 +51,7 @@ export const Surgery = () => {
 
         const data = await res.json();
 
-        const newData = data.map((surgeon) => {return { ...surgeon, full_name: `${surgeon.first_name} ${surgeon.last_name}`}});
+        const newData = data.map((surgeon) => {return { ...surgeon, full_name: `${surgeon.first_name} ${surgeon.last_name} - ${surgeon.specialty}`}});
         newData.sort((a,b) => (a.last_name > b.last_name) ? 1 : ((b.last_name > a.last_name) ? -1 : 0))
 
         setAllSurgeons(newData);
@@ -157,7 +157,7 @@ export const Surgery = () => {
         if (location.pathname === `/surgeries/${params.id}` || location.pathname ===  `/surgeries/${params.id}/edit`) {
             //getSurgeryById(params.suergeryId).then(x => setSurgery(x));
 
-            console.log("HIIIII")
+            // console.log("HIIIII")
             
             fetch(`http://localhost:8080/surgeries/${params.id}`)
             .then(async res => {
