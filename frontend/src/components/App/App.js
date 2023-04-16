@@ -3,6 +3,7 @@ import axios from 'axios';
 import Home from '../Home/Home';
 import Header from '../Header/Header';
 import Login from '../Login/Login';
+import { Surgeries } from '../Home/Surgeries'
 import React, { useState } from 'react';
 
 
@@ -67,8 +68,44 @@ function App() {
   
   const [token, setToken] = useState(getToken());
 
+  const list = [
+    {
+      sid: 123456,
+      surgeonID: 1,
+      patientID: 1,
+      supportStaffID: 1,
+      date: "4/12/2023",
+      time: "11:00",
+      duration: "3 hours",
+      location: "456",
+      state: "pending"
+    },
+    {
+      sid: 234567,
+      surgeonID: 2,
+      patientID: 2,
+      supportStaffID: 2,
+      date: "4/12/2023",
+      time: "11:00",
+      duration: "3 hours",
+      location: "456",
+      state: "rejected"
+    },
+    {
+      sid: 345678,
+      surgeonID: 3,
+      patientID: 3,
+      supportStaffID: 3,
+      date: "4/12/2023",
+      time: "11:00",
+      duration: "3 hours",
+      location: "456",
+      state: "pending"
+    }
+  ]
+
   if (!token) {
-    return <Login setToken={setToken} />
+      return <Surgeries list={list}/>
   }
 
   return (
