@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams} from "react-router-dom";
 import { TextField, SelectField, TextAreaField } from "./common";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import _, { filter } from 'underscore';
+import {Header} from './Header/Header';
 
 export const Surgery = () => {
 
@@ -39,7 +40,7 @@ export const Surgery = () => {
     const [ allSurgeries, setAllSurgeries] = useState([]);
     const [ allSurgeons, setAllSurgeons ] = useState([]);
     const [ filteredSurgeons, setfilteredSurgeons ] = useState([]);
-
+    
     useEffect(() =>{
 
 
@@ -89,7 +90,6 @@ export const Surgery = () => {
     useEffect(() =>{
 
         // console.log("HIIIIIIII");
-
         if (surgery.month !== undefined && surgery.day !== undefined && surgery.time !== undefined){
 
             const filteredSurgeries = allSurgeries.filter(x => x.month === surgery.month && x.day === surgery.day && x.time === surgery.time && x.id !== surgery?.id);
@@ -243,8 +243,14 @@ export const Surgery = () => {
                 <style>{'body { background-color: var(--bs-dark); }'}</style>
             </Helmet>
         </HelmetProvider>
-        <div class="card-header"> 
-            {header()}
+        <div className="collapse navbar-collapse" id="navbarText"> 
+            <Header />
+        </div>
+        <div className="card-header row"> 
+            <div className="col-10">{header()}</div>
+            <button className="col navbar-toggler text-info" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-expanded="false">
+                Toggle Nav
+            </button>
         </div>
         <div className="card-body">
             <fieldset disabled={location.pathname === `/surgeries/${params.id}`}>

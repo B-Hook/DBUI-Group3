@@ -1,7 +1,7 @@
-import LoginContainer from "./LoginContainer"
+import { LoginContainer } from "./LoginContainer"
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-function Login() {
+export const Login = () => {
     return (
         <div>
             <header className="m-3 text-dark fs-1">
@@ -23,5 +23,3 @@ function Login() {
         </div>
     )
 }
-
-export default Login;

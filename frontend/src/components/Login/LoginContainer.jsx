@@ -1,9 +1,8 @@
 import { useContext, useState, useEffect } from 'react';
-import './Login.css';
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../AppContext";
 
-function LoginContainer({type}) {
+export const LoginContainer = ({type}) => {
     const [userName, setUserName] = useState();
     const [password, setPassword] = useState();
     const [userType, setUserType] = useState();
@@ -79,8 +78,6 @@ function LoginContainer({type}) {
         </div>
     )
 }
-
-export default LoginContainer;
 
 // Login.propTypes = {
 //     setToken: PropTypes.func.isRequired
