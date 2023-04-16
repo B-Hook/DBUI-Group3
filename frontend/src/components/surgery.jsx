@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams} from "react-router-dom";
 import { TextField, SelectField, TextAreaField } from "./common";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import _ from 'underscore';
+import _, { filter } from 'underscore';
 
 export const Surgery = () => {
 
@@ -35,9 +35,10 @@ export const Surgery = () => {
         "Cardiology"
     ];
 
-    const [ surgery, setSurgery ] = useState(undefined);
-
-    const [ surgeons, setSurgeons ] = useState([]);
+    const [ surgery, setSurgery ] = useState([]);
+    const [ allSurgeries, setAllSurgeries] = useState([]);
+    const [ allSurgeons, setAllSurgeons ] = useState([]);
+    const [ filteredSurgeons, setfilteredSurgeons ] = useState([]);
 
     useEffect(() =>{
 
@@ -53,21 +54,59 @@ export const Surgery = () => {
         const newData = data.map((surgeon) => {return { ...surgeon, full_name: `${surgeon.first_name} ${surgeon.last_name}`}});
         newData.sort((a,b) => (a.last_name > b.last_name) ? 1 : ((b.last_name > a.last_name) ? -1 : 0))
 
-        setSurgeons(newData);
+        setAllSurgeons(newData);
 
         })
         .catch(error => {
             console.error('Surgeons do not exist!', error);
         });
-    },[])
 
-    console.log(surgery);
+        fetch('http://localhost:8080/surgeries').then(async res => {
+    
+        if (!res.ok) {
+            throw new Error(`This is an HTTP error: The status is ${res.status}`);
+        }
+
+        const data = await res.json();
+        setAllSurgeries(data);
+        })
+        .catch(error => {
+            console.error('Surgeries do not exist!', error);
+        });
+
+    },[]);
+
+    // console.log(surgery);
 
     const location = useLocation();
     const navigate = useNavigate();
     const params = useParams();
 
+    // console.log(allSurgeons);
+
     // console.log(location.pathname);
+
+    useEffect(() =>{
+
+        // console.log("HIIIIIIII");
+
+        if (surgery.month !== undefined && surgery.day !== undefined && surgery.time !== undefined){
+
+            const filteredSurgeries = allSurgeries.filter(x => x.month === surgery.month && x.day === surgery.day && x.time === surgery.time && x.id !== surgery?.id);
+
+            setfilteredSurgeons(allSurgeons.filter(x => {
+                for (let y in filteredSurgeries) {
+                    if (x.id === undefined || x.id === filteredSurgeries[y].surgeon_id)
+                        return false;
+                    }
+                    return true;
+            }))
+
+            // console.log(filteredSurgeons);
+
+        }
+
+    },[surgery.month, surgery.day, surgery.time]);
 
     const mergeSurgery = delta => setSurgery({ ...surgery, ...delta });
 
@@ -226,6 +265,7 @@ export const Surgery = () => {
                     <div className="col">
                         <TextField id="staffNum"
                                     label="Number of Staff Members"
+                                    type="number"
                                     value={surgery.staff_num}
                                     setValue={staff_num => mergeSurgery({ staff_num })} />
                     </div>
@@ -240,18 +280,21 @@ export const Surgery = () => {
                     <div className="col">
                         <TextField id="month"
                                     label="Month"
+                                    type="number"
                                     value={surgery.month}
                                     setValue={month => mergeSurgery({ month })} />
                     </div>
                     <div className="col">
                         <TextField id="day"
                                     label="Day"
+                                    type="number"
                                     value={surgery.day}
                                     setValue={day => mergeSurgery({ day })} />
                     </div>
                     <div className="col">
                         <SelectField id="time"
                                     label="Operation Time"
+                                    type="number"
                                     value={surgery.time}
                                     setValue={time => mergeSurgery({ time })}
                                     options={times} />
@@ -259,6 +302,7 @@ export const Surgery = () => {
                     <div className="col">
                         <TextField id="duration"
                                     label="Duration (in minutes)"
+                                    type="number"
                                     value={surgery.duration}
                                     setValue={duration => mergeSurgery({ duration })}/>
                     </div>
@@ -269,7 +313,7 @@ export const Surgery = () => {
                                     label="Surgeon"
                                     value={surgery.surgeon_id}
                                     setValue={surgeon_id => mergeSurgery({ surgeon_id })}
-                                    options={surgeons}
+                                    options={filteredSurgeons}
                                     optionValueKey="id"
                                     optionLabelKey="full_name"/>
                     </div>
