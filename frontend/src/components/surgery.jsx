@@ -24,16 +24,12 @@ export const Surgery = () => {
     ];
 
     const specializations = [
-        "Bone",
-        "Brain",
-        "Ear",
-        "Eye",
-        "Heart",
-        "Lungs",
-        "Muscle",
-        "Rheumatology",
-        "Dermatology",
-        "Cardiology"
+        "Neurological",
+        "Obstetrics and Gynecology",
+        "Oncology",
+        "Ophthalmic",
+        "Thoracic",
+        "Trauma",
     ];
 
     const [ surgery, setSurgery ] = useState([]);
