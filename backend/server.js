@@ -181,7 +181,7 @@ app.put('/surgeries', (req,res) => {
 
   const query = `
     UPDATE surgeries
-    SET surgeon_id, patient_name = ?, staff_num = ?, month = ?, day = ?, time = ?, duration = ?, room_num = ?, specialty = ?, status = ?, notes = ?
+    SET surgeon_id = ?, patient_name = ?, staff_num = ?, month = ?, day = ?, time = ?, duration = ?, room_num = ?, specialty = ?, status = ?, notes = ?
     WHERE id = ?
     `;
 
