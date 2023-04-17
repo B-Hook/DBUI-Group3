@@ -14,9 +14,9 @@ const mysql = require('mysql')
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'Ilikepie1673',
+  password: 'CoolPasswordThanks',
   database: 'DBUI'
-})
+});
 
 connection.connect()
 
@@ -172,7 +172,28 @@ app.post('/surgeries', (req, res) => {
 });
 
 
+app.put('/surgeries', (req,res) => {
+  const { id, surgeon_id, patient_name, support_staff_number, date, time, duration, location, specialty } = req.body;
 
+
+  const query = `
+    UPDATE surgeries
+    SET id = ?, surgeon_id, patient_name = ?, support_staff_number = ?, date = ?, time = ?, duration = ?, location = ?, specialty = ?
+    WHERE id = ?
+    `;
+
+  connection.query(query, [id, surgeon_id, patient_name, support_staff_number, date, time, duration, location, specialty], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'An error occurred while updating the surgery' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Surgery not found' });
+    }
+
+    res.status(200).json({ message: 'Surgery updated successfully' });
+  });
+})
 
 
 // app.put('/parse', (req, res) => {
