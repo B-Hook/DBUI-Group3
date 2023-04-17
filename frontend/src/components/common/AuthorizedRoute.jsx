@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AppContext } from "../../AppContext";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Header } from "../Header/Header";
 
 export const AuthorizedRoute = () => {
     const appContext = useContext(AppContext);
@@ -11,6 +12,7 @@ export const AuthorizedRoute = () => {
     } else {
         return <div>
             <main>
+                {/* <Header /> */}
                 <Outlet />
             </main>
         </div>
