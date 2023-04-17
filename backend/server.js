@@ -155,16 +155,16 @@ app.get('/surgeries/:id', (req, res) => {
 });
 
 app.post('/surgeries', (req, res) => {
-  const { surgeon_id, patient_name, support_staff_number, date, time, duration, location, specialty } = req.body;
+  const { surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, notes } = req.body;
 
   const status = "pending";
   
   const query = `
-    INSERT INTO surgeries (surgeon_id, patient_name, support_staff_number, date, time, duration, location, specialty)
+    INSERT INTO surgeries (surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, status, notes)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
-  connection.query(query, [surgeon_id, patient_name, support_staff_number, date, time, duration, location, specialty], (err, result) => {
+  connection.query(query, [surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, status, notes], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'An error occurred while creating the surgery' });
     }
@@ -175,16 +175,17 @@ app.post('/surgeries', (req, res) => {
 
 
 app.put('/surgeries', (req,res) => {
-  const { id, surgeon_id, patient_name, support_staff_number, date, time, duration, location, specialty } = req.body;
+  const { surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, status, notes } = req.body;
+  const surgeryId = req.params.id;
 
 
   const query = `
     UPDATE surgeries
-    SET id = ?, surgeon_id, patient_name = ?, support_staff_number = ?, date = ?, time = ?, duration = ?, location = ?, specialty = ?
+    SET surgeon_id, patient_name = ?, staff_num = ?, month = ?, day = ?, time = ?, duration = ?, room_num = ?, specialty = ?, status = ?, notes = ?
     WHERE id = ?
     `;
 
-  connection.query(query, [id, surgeon_id, patient_name, support_staff_number, date, time, duration, location, specialty], (err, result) => {
+  connection.query(query, [ surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, status, notes, surgeryId], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'An error occurred while updating the surgery'});
     }
