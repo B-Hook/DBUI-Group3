@@ -22,12 +22,15 @@ CREATE TABLE surgeries(
     id                      INT AUTO_INCREMENT PRIMARY KEY,
     surgeon_id              INT NOT NULL,
     patient_name            VARCHAR(255) NULL,
-    support_staff_number    INT NOT NULL,
-    date                    date NOT NULL,
-    time                    time NOT NULL,
-    duration                time NOT NULL,
-    location                VARCHAR(255) NOT NULL,
+    staff_num               INT NOT NULL,
+    month                   INT NOT NULL,
+    day                     INT NOT NULL,
+    time                    VARCHAR(255) NOT NULL,
+    duration                INT NOT NULL,
+    room_num                VARCHAR(255) NOT NULL,
     specialty               VARCHAR(255) NOT NULL,
+    status                  VARCHAR(255) NOT NULL,
+    notes                   VARCHAR(1000) NOT NULL,
     CONSTRAINT fk_surgeon   FOREIGN KEY (surgeon_id) REFERENCES users(id)
 );
 
