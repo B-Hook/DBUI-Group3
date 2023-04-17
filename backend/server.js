@@ -174,7 +174,7 @@ app.post('/surgeries', (req, res) => {
 });
 
 
-app.put('/surgeries', (req,res) => {
+app.put('/surgeries/:id', (req,res) => {
   const { surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, status, notes } = req.body;
   const surgeryId = req.params.id;
 
@@ -194,72 +194,9 @@ app.put('/surgeries', (req,res) => {
       return res.status(404).json({ error: 'Surgery not found' });
     }
 
-    res.status(200).json({ message: 'Surgery updated successfully' });
+    res.status(200).json(req.body);
   });
 })
 
 
-// app.put('/parse', (req, res) => {
-//     console.log(req.body)
-    
-//     try {
-//         const { first, last, age, admin } = req.body
-//         const name = `${first} ${last}`
-//         const isAdmin = admin ? "is an admin" : "is not an admin"
-
-//         res.status(200)
-//         res.send(`${name} is ${age} years old and ${isAdmin}`)
-//     } catch (err) {
-//         console.log(err)
-//     }
-// })
-
-// app.get('/db', (req, res) => {
-//     connection.query('SHOW TABLES', (err, rows, fields) =>{
-//         if (err) throw err
-
-//         console.log(rows)
-//         res.status(200)
-//         res.send(rows)
-//     })
-// })
-
-// app.post('/user', (req, res) => {
-//     const { username, password } = req.body
-//     const query = `INSERT INTO users (first_name, last_name, age, admin) VALUES ('${first}', '${last}', ${age}, ${admin})`
-//     connection.query(query, (err, rows, fields) => {
-//         if (err) throw err
-
-//         console.log(rows)
-//         res.status(200)
-//         res.send("Successfully added user!")
-//     })
-// })
-
-// app.get('/users', (req, res) => {
-//     connection.query(`SELECT * FROM users`, (err, rows, fields) => {
-//         if (err) throw err
-
-//         res.status(200)
-//         res.send(rows)
-//     })
-// })
-
-// app.put('/users/clear', (req, res) => {
-//     connection.query(`DELETE FROM users`, (err, rows, fields) => {
-//         if (err) throw err
-
-//         res.status(200)
-//         res.send("Successfully cleared users!")
-//     })
-// })
-
-
 app.listen(8080, () => console.log('API is running on http://localhost:8080/'));
-
-
-
-// // Start server
-// app.listen(port, () => {
-//     console.log(`Example app listening on port ${port}`)
-// })
