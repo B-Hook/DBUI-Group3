@@ -194,7 +194,7 @@ app.put('/surgeries/:id', (req,res) => {
       return res.status(404).json({ error: 'Surgery not found' });
     }
 
-    res.status(200).json(result);
+    res.status(200).json(req.body);
   });
 })
 
