@@ -22,7 +22,7 @@ connection.connect()
 
 
 app.post('/login', (req, res) => {
-  connection.query(`SELECT * FROM users WHERE username = '${req.body.username}' AND password = '${req.body.password}' AND type = '${req.body.usertype}'`, (err, rows, fields) => {
+  connection.query(`SELECT * FROM users WHERE username = '${req.body.username}' AND password = '${req.body.password}' AND type = '${req.body.userType}'`, (err, rows, fields) => {
     if (err) {
       return res.status(500).json({ error: 'An error occurred during the login process' });
     }
