@@ -34,7 +34,7 @@ CREATE TABLE surgeries(
     CONSTRAINT fk_surgeon   FOREIGN KEY (surgeon_id) REFERENCES users(id)
 );
 
-INSERT INTO surgeries (surgeon_id, patient_name, support_staff_number, date, time, duration, location, specialty)
-VALUES  (1, 'Bob Smith', 3, '2023/10/04', '4:00:00', '00:30:00', 'Patient Room', 'Rheumatology'),
-        (2, 'John Doe', 1, '2023/10/04', '4:30:00', '00:30:00', 'Patient Room', 'Dermatology'),
-        (3, 'First Last', 2, '2023/10/04', '4:30:00', '02:00:00', 'Operating Room', 'Cardiology');
+INSERT INTO surgeries (surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, status, notes)
+VALUES  (1, 'Bob Smith', 3, 10, 4, 'Morning', 30, '1B', 'Rheumatology', 'pending', 'Nothing to note.'),
+        (2, 'John Doe', 1, 10, 4, 'Afternoon', 30, '4B', 'Dermatology', 'accepted', 'Nothing to note.'),
+        (3, 'First Last', 2, 10, 4, 'Evening', 120, '2A', 'Cardiology', 'pending', 'Nothing to note.');
