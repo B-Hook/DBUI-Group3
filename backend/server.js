@@ -186,7 +186,7 @@ app.put('/surgeries', (req,res) => {
 
   connection.query(query, [id, surgeon_id, patient_name, support_staff_number, date, time, duration, location, specialty], (err, result) => {
     if (err) {
-      return res.status(500).json({ error: 'An error occurred while updating the surgery' });
+      return res.status(500).json({ error: 'An error occurred while updating the surgery'});
     }
 
     if (result.affectedRows === 0) {
