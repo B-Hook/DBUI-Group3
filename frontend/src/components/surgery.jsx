@@ -148,11 +148,26 @@ export const Surgery = () => {
         const req = {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify( {  } )
+            body: JSON.stringify( surgery )
         };
+
+        console.log(req.body);
+
+        fetch(`http://localhost:8080/surgeries/${params.id}`, req).then(async res => {
+    
+        if (!res.ok) {
+            throw new Error(`The status is ${res.status}`);
+        }
+
+        const data = await res.json();
         
-        
-        
+        setSurgery(data);
+
+        })
+        .catch(error => {
+            console.error('Could not save surgery', error);
+            navigate('/');
+        });
         
         /*addSurgery(surgery).then(x => navigate('/'));*/};
 
@@ -232,7 +247,8 @@ export const Surgery = () => {
                         <div className="col">
                             <button type="button"
                                 className="btn btn-info btn-lg col-12 mt-4"
-                                onClick={() => {navigate(-1);}}>Save</button>
+                                onClick={() => {handleEdit();
+                                                navigate(-1);}}>Save</button>
                         </div>
                     </div>
         }
