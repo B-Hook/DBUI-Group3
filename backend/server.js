@@ -161,7 +161,7 @@ app.post('/surgeries', (req, res) => {
   
   const query = `
     INSERT INTO surgeries (surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, status, notes)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   connection.query(query, [surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, status, notes], (err, result) => {
