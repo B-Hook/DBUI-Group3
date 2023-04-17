@@ -40,7 +40,7 @@ export const Surgery = () => {
     const [ allSurgeries, setAllSurgeries] = useState([]);
     const [ allSurgeons, setAllSurgeons ] = useState([]);
     const [ filteredSurgeons, setfilteredSurgeons ] = useState([]);
-    
+
     useEffect(() =>{
 
 
@@ -90,11 +90,14 @@ export const Surgery = () => {
     useEffect(() =>{
 
         // console.log("HIIIIIIII");
-        if (surgery.month !== undefined && surgery.day !== undefined && surgery.time !== undefined){
+        if (surgery.month !== undefined && surgery.day !== undefined && surgery.time !== undefined && surgery.specialty !== undefined){
 
             const filteredSurgeries = allSurgeries.filter(x => x.month === surgery.month && x.day === surgery.day && x.time === surgery.time && x.id !== surgery?.id);
 
             setfilteredSurgeons(allSurgeons.filter(x => {
+                if (x.specialty !== surgery.specialty){
+                    return false;
+                }
                 for (let y in filteredSurgeries) {
                     if (x.id === undefined || x.id === filteredSurgeries[y].surgeon_id)
                         return false;
@@ -106,7 +109,7 @@ export const Surgery = () => {
 
         }
 
-    },[surgery.month, surgery.day, surgery.time]);
+    },[surgery.month, surgery.day, surgery.time, surgery.specialty]);
 
     const mergeSurgery = delta => setSurgery({ ...surgery, ...delta });
 
@@ -229,9 +232,7 @@ export const Surgery = () => {
                         <div className="col">
                             <button type="button"
                                 className="btn btn-info btn-lg col-12 mt-4"
-                                onClick={() => {console.log(surgery);
-                                                handleSave();
-                                                navigate(-1);}}>Save</button>
+                                onClick={() => {navigate(-1);}}>Save</button>
                         </div>
                     </div>
         }
