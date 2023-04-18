@@ -81,12 +81,14 @@ export const Surgeries = ({ list }) => {
                 surgeries.map((surgery, index) =>
                     <li className={"list-group-item"} key={index}>
                         <span className={"fs-4"}>{surgery.date}</span>
-                        <p className={"float-end"}>Time:  {surgery.time}</p>
-                        {surgery.sid}
-                        <div className={"clearfix"}></div>
+                        <p className={"float-end"}>Time: {surgery.time}</p>
+                        <p className={"clearfix"}></p>
+                        <p className={"float-end"}>Duration: {surgery.duration}</p>
+                        <p className={"clearfix"}></p>
+                        <p className={"display-inline"}>{surgery.name}</p>
                         <button type={"button"}
                                 className={"btn btn-primary badge"}
-                                onClick={() => navigate(`app.com/surgeries/${surgery.sid}`)}
+                                onClick={() => navigate(`app.com/surgeries/`${surgery.id})}
                         >Edit</button>
                     </li>
                 )
