@@ -4,18 +4,9 @@ import { TextField, SelectField, TextAreaField } from "./common";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import _, { filter } from 'underscore';
 import {Header} from './Header/Header';
+import { getSurgeons, getSurgeries, getSurgeryById, createSurgery, editSurgery } from '../Api';
 
 export const Surgery = () => {
-
-    const days = [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday"
-    ];
 
     const times = [
         "Morning",
@@ -37,55 +28,37 @@ export const Surgery = () => {
     const [ allSurgeons, setAllSurgeons ] = useState([]);
     const [ filteredSurgeons, setfilteredSurgeons ] = useState([]);
 
-    useEffect(() =>{
-
-
-        fetch('http://localhost:8080/surgeons').then(async res => {
-    
-        if (!res.ok) {
-            throw new Error(`This is an HTTP error: The status is ${res.status}`);
-        }
-
-        const data = await res.json();
-
-        const newData = data.map((surgeon) => {return { ...surgeon, full_name: `${surgeon.first_name} ${surgeon.last_name} - ${surgeon.specialty}`}});
-        newData.sort((a,b) => (a.last_name > b.last_name) ? 1 : ((b.last_name > a.last_name) ? -1 : 0))
-
-        setAllSurgeons(newData);
-
-        })
-        .catch(error => {
-            console.error('Surgeons do not exist!', error);
-        });
-
-        fetch('http://localhost:8080/surgeries').then(async res => {
-    
-        if (!res.ok) {
-            throw new Error(`This is an HTTP error: The status is ${res.status}`);
-        }
-
-        const data = await res.json();
-        setAllSurgeries(data);
-        })
-        .catch(error => {
-            console.error('Surgeries do not exist!', error);
-        });
-
-    },[]);
-
-    // console.log(surgery);
 
     const location = useLocation();
     const navigate = useNavigate();
     const params = useParams();
 
-    // console.log(allSurgeons);
+    useEffect(() =>{
 
-    // console.log(location.pathname);
+        getSurgeons().then(data => {
+            const newData = data.map((surgeon) => {return { ...surgeon, full_name: `${surgeon.first_name} ${surgeon.last_name} - ${surgeon.specialty}`}});
+            newData.sort((a,b) => (a.last_name > b.last_name) ? 1 : ((b.last_name > a.last_name) ? -1 : 0))
+            setAllSurgeons(newData);
+        })
+        .catch(error => console.error('Surgeons do not exist!', error));
+
+        getSurgeries().then(data => setAllSurgeries(data))
+                      .catch(error => console.error('Surgeries do not exist!', error))
+
+        if (location.pathname === `/surgeries/${params.id}` || location.pathname ===  `/surgeries/${params.id}/edit`) {
+
+            getSurgeryById(params.id).then(data => setSurgery(data))
+                                        .catch(error => console.error('Surgery ID does not exist!', error));
+        
+        } 
+        else {
+            setSurgery({ });
+        }
+
+    },[]);
 
     useEffect(() =>{
 
-        // console.log("HIIIIIIII");
         if (surgery.month !== undefined && surgery.day !== undefined && surgery.time !== undefined && surgery.specialty !== undefined){
 
             const filteredSurgeries = allSurgeries.filter(x => x.month === surgery.month && x.day === surgery.day && x.time === surgery.time && x.id !== surgery?.id);
@@ -100,9 +73,6 @@ export const Surgery = () => {
                     }
                     return true;
             }))
-
-            // console.log(filteredSurgeons);
-
         }
 
     },[surgery.month, surgery.day, surgery.time, surgery.specialty]);
@@ -111,89 +81,17 @@ export const Surgery = () => {
 
     const handleSave = () =>{
 
-        const req = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(surgery)
-        };
-
-        console.log(req.body);
-
-        fetch('http://localhost:8080/surgeries', req).then(async res => {
-    
-        if (!res.ok) {
-            throw new Error(`The status is ${res.status}`);
-        }
-
-        const data = await res.json();
-
-        setSurgery(data)
-
-        })
-        .catch(error => {
-            console.error('Could not save surgery', error);
-            navigate('/');
-        });
+        createSurgery(surgery).then(data => setSurgery(data))
+                              .catch(error => console.error('Could not save surgery', error));
 
     };
 
     const handleEdit = async () => { 
 
-        // need put route for surgery in back end to do.
-
-        const req = {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify( surgery )
-        };
-
-        console.log(req.body);
-
-        fetch(`http://localhost:8080/surgeries/${params.id}`, req).then(async res => {
-    
-        if (!res.ok) {
-            throw new Error(`The status is ${res.status}`);
-        }
-
-        const data = await res.json();
+        editSurgery(surgery, params.id).then(data => setSurgery(data))
+                                       .catch(error => console.error('Could not save surgery', error));
         
-        setSurgery(data);
-
-        })
-        .catch(error => {
-            console.error('Could not save surgery', error);
-            navigate('/');
-        });
-        
-        /*addSurgery(surgery).then(x => navigate('/'));*/};
-
-    useEffect(() => {
-        if (location.pathname === `/surgeries/${params.id}` || location.pathname ===  `/surgeries/${params.id}/edit`) {
-            //getSurgeryById(params.suergeryId).then(x => setSurgery(x));
-
-            // console.log("HIIIII")
-            
-            fetch(`http://localhost:8080/surgeries/${params.id}`)
-            .then(async res => {
-    
-                if (!res.ok) {
-                    throw new Error(`The status is ${res.status}`);
-                }
-
-                const data = await res.json();
-
-                setSurgery(data)
-
-            })
-            .catch(error => {
-                console.error('Surgery ID does not exist!', error);
-                navigate('/');
-            });
-            //setSurgery({ });
-        } else {
-            setSurgery({ });
-        }
-    }, []);
+    };
 
     if (!surgery) {
         return <>Loading...</>;
@@ -214,10 +112,19 @@ export const Surgery = () => {
     const buttonSetup = () => {
 
         if (location.pathname === "/new-surgery"){
-            return <button type="button"
-                    className="btn btn-info btn-lg col-12 mt-4"
-                    onClick={() => {handleSave();
-                                    navigate('/')}}>Create Surgery</button>
+            return <div className="row align-items-start">
+                        <div className="col">
+                            <button type="button"
+                                className="btn btn-secondary btn-lg col-12 mt-4"
+                                onClick={() => {navigate('/')}}>Return To Home</button>
+                        </div>
+                        <div className="col">
+                            <button type="button"
+                                className="btn btn-info btn-lg col-12 mt-4"
+                                onClick={() => {handleSave();
+                                                navigate('/');}}>Create Surgery</button>
+                        </div>
+                    </div>
         }
         else if (location.pathname === `/surgeries/${params.id}`) {
             return <div className="row align-items-start">

@@ -25,9 +25,9 @@ export const Header = () => {
                             </li>
                         </ul>
                     <span class="navbar-text bg-info text-dark ps-0 ms-0">
-                        {appContext.userType}: @{appContext.userName}
+                        {appContext.userType}: @{appContext.username}
                     </span>
-                    <button className="btn btn-danger me-2" onClick={() => {appContext.setUserName(undefined);
+                    <button className="btn btn-danger me-2" onClick={() => {appContext.setUsername(undefined);
                                             appContext.setUserType(undefined);} }>Logout</button>
                     </div>
                 </div>

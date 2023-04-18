@@ -4,16 +4,16 @@ import { createContext } from "react";
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-    const [ userName, setUserName ] = useState(localStorage.userName);
+    const [ username, setUsername ] = useState(localStorage.username);
     const [ userType, setUserType ] = useState(localStorage.userType);
 
     useEffect(() => {
-        if(userName) {
-            localStorage.userName = userName;
+        if(username) {
+            localStorage.username = username;
         } else {
-            delete localStorage.userName; 
+            delete localStorage.username; 
         }
-    }, [ userName ]);
+    }, [ username ]);
 
     useEffect(() => {
         if(userType) {
@@ -31,7 +31,7 @@ export const AppProvider = ({ children }) => {
     //     setUserType
     // }), [ userType ]);
 
-    return <AppContext.Provider value={{userName, setUserName, userType, setUserType}}>
+    return <AppContext.Provider value={{username, setUsername, userType, setUserType}}>
         {children}
     </AppContext.Provider>
 
