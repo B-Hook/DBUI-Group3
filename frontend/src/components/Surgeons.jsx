@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import {Header} from './Header/Header'; 
+import {Header} from './Header/Header';
+import { getSurgeons } from '../Api';
 
 export const Surgeons = () => {
 
@@ -8,21 +9,12 @@ export const Surgeons = () => {
 
     useEffect(() =>{
 
-        fetch('http://localhost:8080/surgeons')
-        .then(async res => {
-            if (!res.ok) {
-                throw new Error(`This is an HTTP error: The status is ${res.status}`);
-            }
-
-            const data = await res.json();
-
-            data.sort((a,b) => (a.last_name > b.last_name) ? 1 : ((b.last_name > a.last_name) ? -1 : 0))
-
+        getSurgeons().then(data => {
+            data.sort((a,b) => (a.last_name > b.last_name) ? 1 : ((b.last_name > a.last_name) ? -1 : 0));
             setSurgeons(data);
-            })
-        .catch(error => {
-            console.error('Surgeons do not exist!', error);
-        });
+        })
+        .catch(error => console.error('Surgeons do not exist!', error));
+        
     }, []);
 
     return <>

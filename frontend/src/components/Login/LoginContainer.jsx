@@ -1,9 +1,10 @@
 import { useContext, useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../AppContext";
+import { authorizeLogin } from '../../Api';
 
 export const LoginContainer = ({type}) => {
-    const [userName, setUserName] = useState();
+    const [username, setUsername] = useState();
     const [password, setPassword] = useState();
     const [userType, setUserType] = useState();
     const appContext = useContext(AppContext);
@@ -11,44 +12,29 @@ export const LoginContainer = ({type}) => {
     const [valid, setValid] = useState(true);
 
     useEffect(()=>{
-        if(appContext.userName){
+        if(appContext.username){
             navigate("/");
         }},[]);
 
     const handleSubmit = async e => {
         e.preventDefault();
 
-        const req = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify( { username:userName, password:password, userType } )
-        };
-
-        try{
-
-            const res = await fetch('http://localhost:8080/login', req)
-
-            if (!res.ok) {
-                throw new Error(`This is an HTTP error: The status is ${res.status}`);
-            }
-            
-            let data = await res.json();
-            appContext.setUserName(data.username);
+        try {
+            let data = await authorizeLogin({ username, password, userType });
+            appContext.setUsername(data.username);
             appContext.setUserType(data.userType);
             navigate("/");
-        } catch (err) {
-            console.log(err.message);
+        }
+        catch (error) {
+            console.log(error);
             setValid(false);
             document.getElementById("inputPassword"+type).classList.add("is-invalid");
             document.getElementById("inputPassword"+type).classList.remove("mb-3");
             document.getElementById("inputPassword"+type).classList.add("mb-2");
             document.getElementById("button"+type).classList.remove("mt-4");
-
         }
         
     }
-
-    // document.body.style = 'background: red;';
 
     return (
         <div>
@@ -61,7 +47,7 @@ export const LoginContainer = ({type}) => {
                         <label className=" form-label fs-4" htmlFor="inputUserName">
                             Username
                         </label>
-                        <input id={"inputUserName"+type}className="form-control col-auto mb-4"type="text" onChange={e => setUserName(e.target.value)} />
+                        <input id={"inputUserName"+type}className="form-control col-auto mb-4"type="text" onChange={e => setUsername(e.target.value)} />
                         <label className="col-auto form-label fs-4" htmlFor="inputPassword">
                             Password
                         </label>
@@ -78,7 +64,3 @@ export const LoginContainer = ({type}) => {
         </div>
     )
 }
-
-// Login.propTypes = {
-//     setToken: PropTypes.func.isRequired
-// };

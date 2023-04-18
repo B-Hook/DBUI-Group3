@@ -7,7 +7,7 @@ export const AuthorizedRoute = () => {
     const appContext = useContext(AppContext);
     const location = useLocation();
 
-    if (!appContext.userName) {
+    if (!appContext.username) {
         return <Navigate to="/login" state={{ from: location.pathname }} />
     } else {
         return <div>
