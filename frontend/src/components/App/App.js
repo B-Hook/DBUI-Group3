@@ -71,14 +71,14 @@ function App() {
   const list = [
     {
       sid: 123456,
-      surgeonID: 1,
-      patientID: 1,
-      supportStaffID: 1,
+      surgeon_id: 1,
+      patient_name: 1,
+      staff_num: 1,
       date: "4/12/2023",
       time: "11:00",
       duration: "3 hours",
       location: "456",
-      state: "pending"
+      state: "accepted"
     },
     {
       sid: 234567,
@@ -105,7 +105,10 @@ function App() {
   ]
 
   if (!token) {
-      return <Surgeries list={list}/>
+      return <>
+        <Header />
+        <Surgeries list={list}/>
+      </>
   }
 
   return (
