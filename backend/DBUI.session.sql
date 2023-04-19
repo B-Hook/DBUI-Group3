@@ -52,7 +52,7 @@ CREATE TABLE surgeries(
     room_num                VARCHAR(255) NOT NULL,
     specialty               VARCHAR(255) NOT NULL,
     status                  VARCHAR(255) NOT NULL,
-    notes                   VARCHAR(1000) NOT NULL,
+    notes                   VARCHAR(1000),
     CONSTRAINT fk_surgeon   FOREIGN KEY (surgeon_id) REFERENCES users(id)
 );
 
