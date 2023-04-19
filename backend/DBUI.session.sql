@@ -16,7 +16,6 @@ INSERT INTO users (first_name, last_name, specialty, type, username, password)
 VALUES  ('John', 'Doe', 'Neurological', 'surgeon', 'surgeon1', 'password'),
         ('Nader', 'Jalili', 'Ophthalmic', 'surgeon', 'surgeon2', 'password'),
         ('Gerald', 'Turner', 'Spine', 'surgeon', 'surgeon3', 'password'),
-        ('Justin', 'Admin', '', 'admin', 'admin', 'password'),
         ('Jane', 'Doe', 'Oncology', 'surgeon', 'surgeon4', 'password'),
         ('James', 'Smith', 'Trauma Surgery', 'surgeon', 'surgeon5', 'password'),
         ('David', 'Johnson', 'Obstetrics and Gynecology', 'surgeon', 'surgeon6', 'password'),
@@ -34,9 +33,10 @@ VALUES  ('John', 'Doe', 'Neurological', 'surgeon', 'surgeon1', 'password'),
         ('Andrew', 'Perez', 'Obstetrics and Gynecology', 'surgeon', 'surgeon18', 'password'),
         ('Ethan', 'Taylor', 'Neurological', 'surgeon', 'surgeon19', 'password'),
         ('Mia', 'Hernandez', 'Ophthalmic', 'surgeon', 'surgeon20', 'password'),
-        ('David', 'Admin', '', 'admin', 'admin2', 'password'),
         ('Olivia', 'Garcia', 'Spine', 'surgeon', 'surgeon21', 'password'),
-        ('Emma', 'Rodriguez', 'Oncology', 'surgeon', 'surgeon22', 'password');
+        ('Emma', 'Rodriguez', 'Oncology', 'surgeon', 'surgeon22', 'password'),
+        ('David', 'Admin', '', 'admin', 'admin2', 'password'),
+        ('Justin', 'Admin', '', 'admin', 'admin', 'password');
 
 
 
