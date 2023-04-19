@@ -42,7 +42,7 @@ VALUES  ('John', 'Doe', 'Neurological', 'surgeon', 'surgeon1', 'password'),
 
 CREATE TABLE surgeries(
     id                      INT AUTO_INCREMENT PRIMARY KEY,
-    surgeon_id              INT NOT NULL,
+    surgeon_id              INT,
     patient_name            VARCHAR(255) NULL,
     staff_num               INT NOT NULL,
     month                   INT NOT NULL,
