@@ -154,6 +154,22 @@ app.get('/surgeries/:id', (req, res) => {
   });
 });
 
+app.get('/surgeries/surgeon/:surgeon_id', (req, res) => {
+  const surgeon_id = req.params.surgeon_id;
+
+  connection.query('SELECT * FROM surgeries WHERE surgeon_id = ?', [surgeon_id], (err, rows, fields) => {
+    if (err) {
+      return res.status(500).json({ error: 'An error occurred while fetching the surgeries' });
+    }
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Surgeries not found' });
+    }
+
+    res.status(200).json(rows);
+  });
+});
+
 app.post('/surgeries', (req, res) => {
   const { surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, notes } = req.body;
 
@@ -172,7 +188,22 @@ app.post('/surgeries', (req, res) => {
     res.status(200).json({ message: 'Surgery created successfully', surgeryId: result.insertId });
   });
 });
-
+app.delete('/surgeries/:id', (req, res) => {
+    const id = req.params.id;
+  
+    connection.query('DELETE FROM surgeries WHERE id = ?', [id], (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ error: 'An error occurred while deleting the surgery' });
+      }
+  
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Surgery not found' });
+      }
+  
+      res.status(200).json({ message: 'Surgery deleted successfully' });
+    });
+  });
 
 app.put('/surgeries/:id', (req,res) => {
   const { surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, status, notes } = req.body;
