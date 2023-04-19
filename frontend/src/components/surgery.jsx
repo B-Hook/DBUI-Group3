@@ -19,6 +19,7 @@ export const Surgery = () => {
         "Ophthalmic",
         "Thoracic",
         "Trauma Surgery",
+        "Spine"
     ];
 
     const [ initialSurgery, setInitialSurgery ] = useState([]);
