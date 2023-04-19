@@ -164,7 +164,7 @@ app.post('/surgeries', (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
-  connection.query(query, [surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, status, notes], (err, result) => {
+  connection.query(query, [(surgeon_id === '')?null:surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, (surgeon_id === '')?"no surgeon":status, notes, surgeryId], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'An error occurred while creating the surgery' });
     }
@@ -185,7 +185,7 @@ app.put('/surgeries/:id', (req,res) => {
     WHERE id = ?
     `;
 
-  connection.query(query, [ surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, status, notes, surgeryId], (err, result) => {
+    connection.query(query, [(surgeon_id === '')?null:surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, (surgeon_id === '')?"no surgeon":status, notes, surgeryId], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'An error occurred while updating the surgery'});
     }
