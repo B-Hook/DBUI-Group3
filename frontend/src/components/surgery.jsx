@@ -103,6 +103,7 @@ export const Surgery = () => {
     const handleSave = () =>{
 
         createSurgery(surgery).then(data => setSurgery(data))
+                              .then(() => navigate('/surgeries'))
                               .catch(error => console.error('Could not save surgery', error));
 
     };
@@ -143,8 +144,7 @@ export const Surgery = () => {
                             <button type="button"
                                 className="btn btn-info btn-lg col-12 mt-4"
                                 onClick={() => {if (checkFields()){
-                                                handleSave();
-                                                navigate('/surgeries');}}}>Create Surgery</button>
+                                                handleSave();}}}>Create Surgery</button>
                         </div>
                     </div>
         }
