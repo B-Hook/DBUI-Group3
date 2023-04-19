@@ -6,6 +6,8 @@ export const AppContext = createContext();
 export const AppProvider = ({ children }) => {
     const [ username, setUsername ] = useState(localStorage.username);
     const [ userType, setUserType ] = useState(localStorage.userType);
+    const [ id, setId ] = useState(localStorage.id);
+
 
     useEffect(() => {
         if(username) {
@@ -23,6 +25,14 @@ export const AppProvider = ({ children }) => {
         }
     }, [ userType ]);
 
+    useEffect(() => {
+        if(id) {
+            localStorage.id = id;
+        } else {
+            delete localStorage.id; 
+        }
+    }, [ id ]);
+
     // const appContext = useMemo(() => ({
     //     userName,
     //     setUserName
@@ -31,7 +41,7 @@ export const AppProvider = ({ children }) => {
     //     setUserType
     // }), [ userType ]);
 
-    return <AppContext.Provider value={{username, setUsername, userType, setUserType}}>
+    return <AppContext.Provider value={{username, setUsername, userType, setUserType, id, setId}}>
         {children}
     </AppContext.Provider>
 
