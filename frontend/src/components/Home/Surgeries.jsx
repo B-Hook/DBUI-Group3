@@ -87,8 +87,8 @@ export const Surgeries = ({ list }) => {
                         <p className={"clearfix"}></p>
                         <p className={"display-inline"}>{surgery.name}</p>
                         <button type={"button"}
-                                className={"btn btn-primary badge"}
-                                onClick={() => navigate(`app.com/surgeries/`${surgery.id})}
+                                className={"btn btn-lg btn-primary"}
+                                onClick={() => navigate(`surgeries/${surgery.id}`)}
                         >Edit</button>
                     </li>
                 )
