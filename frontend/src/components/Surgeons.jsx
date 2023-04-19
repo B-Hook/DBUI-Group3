@@ -18,11 +18,10 @@ export const Surgeons = () => {
     }, []);
 
     return <>
-        < Header />
         <ul className={"list-group"}>
             {
                 surgeons.map((surgeon) =>
-                    <li className="list-group-item" key={surgeon.id}>
+                    <li className="" key={surgeon.id}>
                         <div className="card">
                         <h5 className="card-header">{surgeon.first_name} {surgeon.last_name}</h5>
                         <div className="card-body">

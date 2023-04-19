@@ -12,7 +12,7 @@ export const AuthorizedRoute = () => {
     } else {
         return <div>
             <main>
-                {/* <Header /> */}
+                <Header />
                 <Outlet />
             </main>
         </div>

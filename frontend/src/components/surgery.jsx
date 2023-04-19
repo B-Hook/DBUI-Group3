@@ -12,7 +12,7 @@ export const Surgery = () => {
         "Morning",
         "Afternoon",
         "Evening"
-    ];
+    ]
 
     const specializations = [
         "Neurological",
@@ -20,9 +20,10 @@ export const Surgery = () => {
         "Oncology",
         "Ophthalmic",
         "Thoracic",
-        "Trauma",
+        "Trauma Surgery",
     ];
 
+    const [ initialSurgery, setInitialSurgery ] = useState([]);
     const [ surgery, setSurgery ] = useState([]);
     const [ allSurgeries, setAllSurgeries] = useState([]);
     const [ allSurgeons, setAllSurgeons ] = useState([]);
@@ -35,29 +36,36 @@ export const Surgery = () => {
 
     useEffect(() =>{
 
-        getSurgeons().then(data => {
-            const newData = data.map((surgeon) => {return { ...surgeon, full_name: `${surgeon.first_name} ${surgeon.last_name} - ${surgeon.specialty}`}});
-            newData.sort((a,b) => (a.last_name > b.last_name) ? 1 : ((b.last_name > a.last_name) ? -1 : 0))
-            setAllSurgeons(newData);
-        })
-        .catch(error => console.error('Surgeons do not exist!', error));
+        const fetchData = async () => {
 
-        getSurgeries().then(data => setAllSurgeries(data))
-                      .catch(error => console.error('Surgeries do not exist!', error))
+            await getSurgeons().then(data => {
+                const newData = data.map((surgeon) => {return { ...surgeon, full_name: `${surgeon.first_name} ${surgeon.last_name} - ${surgeon.specialty}`}});
+                newData.sort((a,b) => (a.last_name > b.last_name) ? 1 : ((b.last_name > a.last_name) ? -1 : 0))
+                setAllSurgeons(newData);
+            })
+            .catch(error => console.error('Surgeons do not exist!', error));
 
-        if (location.pathname === `/surgeries/${params.id}` || location.pathname ===  `/surgeries/${params.id}/edit`) {
+            await getSurgeries().then(data => setAllSurgeries(data))
+                        .catch(error => console.error('Surgeries do not exist!', error))
 
-            getSurgeryById(params.id).then(data => setSurgery(data))
+            if (location.pathname === `/surgeries/${params.id}` || location.pathname ===  `/surgeries/${params.id}/edit`) {
+
+                await getSurgeryById(params.id).then(data => {
+                                        if (data.surgeon_id === null) data.surgeon_id = "";
+                                        setSurgery(data);
+                                        setInitialSurgery(data);})
                                         .catch(error => console.error('Surgery ID does not exist!', error));
-        
-        } 
-        else {
-            setSurgery({ });
+            }
+            
+            else {
+                setSurgery({ });
+            }
         }
+        fetchData();
 
     },[]);
 
-    useEffect(() =>{
+    const filterSurgery = () =>{
 
         if (surgery.month !== undefined && surgery.day !== undefined && surgery.time !== undefined && surgery.specialty !== undefined){
 
@@ -74,10 +82,17 @@ export const Surgery = () => {
                     return true;
             }))
         }
+    }
+
+    useEffect(() =>{
+
+        filterSurgery();
 
     },[surgery.month, surgery.day, surgery.time, surgery.specialty]);
 
     const mergeSurgery = delta => setSurgery({ ...surgery, ...delta });
+
+    const checkFields = () => surgery.patient_name && surgery.specialty && surgery.staff_num && surgery.room_num && surgery.month && surgery.day && surgery.time && surgery.duration;
 
     const handleSave = () =>{
 
@@ -99,13 +114,13 @@ export const Surgery = () => {
 
     const header = () => {
         if (location.pathname === "/new-surgery"){
-            return <h1>Surgery - New </h1>
+            return <h3>Surgery - New </h3>
         }
         else if (location.pathname === `/surgeries/${params.id}`){
-            return <h1>Surgery - View </h1>
+            return <h3>Surgery - View </h3>
         }
         else if (location.pathname === `/surgeries/${params.id}/edit`){
-            return <h1>Surgery - Edit </h1>
+            return <h3>Surgery - Edit </h3>
         }
     }
 
@@ -116,13 +131,14 @@ export const Surgery = () => {
                         <div className="col">
                             <button type="button"
                                 className="btn btn-secondary btn-lg col-12 mt-4"
-                                onClick={() => {navigate('/')}}>Return To Home</button>
+                                onClick={() => {navigate('/surgeries')}}>Return To Home</button>
                         </div>
                         <div className="col">
                             <button type="button"
                                 className="btn btn-info btn-lg col-12 mt-4"
-                                onClick={() => {handleSave();
-                                                navigate('/');}}>Create Surgery</button>
+                                onClick={() => {if (checkFields()){
+                                                handleSave();
+                                                navigate('/surgeries');}}}>Create Surgery</button>
                         </div>
                     </div>
         }
@@ -131,7 +147,7 @@ export const Surgery = () => {
                         <div className="col">
                             <button type="button"
                                 className="btn btn-secondary btn-lg col-12 mt-4"
-                                onClick={() => {navigate('/')}}>Return To Home</button>
+                                onClick={() => {navigate('/surgeries')}}>Return To Home</button>
                         </div>
                         <div className="col">
                             <button type="button"
@@ -145,13 +161,16 @@ export const Surgery = () => {
                         <div className="col">
                             <button type="button"
                                 className="btn btn-danger btn-lg col-12 mt-4"
-                                onClick={() => navigate(-1)}>Cancel</button>
+                                onClick={() => {setSurgery(initialSurgery);
+                                                navigate(-1)}}>Cancel</button>
                         </div>
                         <div className="col">
                             <button type="button"
                                 className="btn btn-info btn-lg col-12 mt-4"
-                                onClick={() => {handleEdit();
-                                                navigate(-1);}}>Save</button>
+                                onClick={() => {if (checkFields()){
+                                                handleEdit();
+                                                setInitialSurgery(surgery);
+                                                navigate(-1);}}}>Save</button>
                         </div>
                     </div>
         }
@@ -163,59 +182,67 @@ export const Surgery = () => {
                 <style>{'body { background-color: var(--bs-dark); }'}</style>
             </Helmet>
         </HelmetProvider>
-        <div className="collapse navbar-collapse" id="navbarText"> 
+        {/* <div className="collapse navbar-collapse" id="navbarText"> 
             <Header />
-        </div>
+        </div> */}
         <div className="card-header row"> 
             <div className="col-10">{header()}</div>
-            <button className="col navbar-toggler text-info" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-expanded="false">
+            {/* <button className="col navbar-toggler text-info" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-expanded="false">
                 Toggle Nav
-            </button>
+            </button> */}
         </div>
         <div className="card-body">
             <fieldset disabled={location.pathname === `/surgeries/${params.id}`}>
-                <div className="row align-items-start">
+                <div className="row align-items-start was-validated">
                     <div className="col">
                     <TextField id="patientName"
                                 label="Patient Name"
                                 value={surgery.patient_name}
-                                setValue={ patient_name => mergeSurgery({ patient_name })} />
+                                setValue={ patient_name => mergeSurgery({ patient_name })}
+                                isRequired={true} />
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
                     </div>
                     <div className="col">
                     <SelectField id="specialization"
                                 label="Specialization"
                                 value={surgery.specialty}
                                 setValue={specialty => mergeSurgery({ specialty })}
-                                options={specializations} />
+                                options={specializations}
+                                isRequired={true} />
                     </div>
                     <div className="col">
                         <TextField id="staffNum"
                                     label="Number of Staff Members"
                                     type="number"
                                     value={surgery.staff_num}
-                                    setValue={staff_num => mergeSurgery({ staff_num })} />
+                                    setValue={staff_num => mergeSurgery({ staff_num })}
+                                    isRequired={true} />
                     </div>
                 </div>
-                <div className="row align-items-start">
+                <div className="row align-items-start was-validated">
                     <div className="col">
                         <TextField id="roomNum"
                                     label="Room"
                                     value={surgery.room_num}
-                                    setValue={room_num => mergeSurgery({ room_num })} />
+                                    setValue={room_num => mergeSurgery({ room_num })}
+                                    isRequired={true} />
                     </div>
                     <div className="col">
                         <TextField id="month"
                                     label="Month"
                                     type="number"
                                     value={surgery.month}
-                                    setValue={month => mergeSurgery({ month })} />
+                                    setValue={month => mergeSurgery({ month })}
+                                    isRequired={true} />
                     </div>
                     <div className="col">
                         <TextField id="day"
                                     label="Day"
                                     type="number"
                                     value={surgery.day}
-                                    setValue={day => mergeSurgery({ day })} />
+                                    setValue={day => mergeSurgery({ day })}
+                                    isRequired={true} />
                     </div>
                     <div className="col">
                         <SelectField id="time"
@@ -223,17 +250,19 @@ export const Surgery = () => {
                                     type="number"
                                     value={surgery.time}
                                     setValue={time => mergeSurgery({ time })}
-                                    options={times} />
+                                    options={times}
+                                    isRequired={true}/>
                     </div>
                     <div className="col">
                         <TextField id="duration"
                                     label="Duration (in minutes)"
                                     type="number"
                                     value={surgery.duration}
-                                    setValue={duration => mergeSurgery({ duration })}/>
+                                    setValue={duration => mergeSurgery({ duration })}
+                                    isRequired={true}/>
                     </div>
                 </div>
-                {surgery.patient_name && surgery.specialty && surgery.staff_num && surgery.room_num && surgery.month && surgery.day && surgery.time && surgery.duration?
+                {location.pathname === `/surgeries/${params.id}` || checkFields()?
                     <div className="col-auto">
                         <SelectField id="surgeon"
                                     label="Surgeon"
