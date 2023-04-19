@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useLocation, useNavigate, useParams} from "react-router-dom";
 import { TextField, SelectField, TextAreaField } from "./common";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { getSurgeons, getSurgeries, getSurgeryById, createSurgery, editSurgery } from '../Api';
+import { AppContext } from "../AppContext";
 
 export const Surgery = () => {
 
@@ -32,6 +33,12 @@ export const Surgery = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const params = useParams();
+    const appContext = useContext(AppContext);
+
+    useEffect(()=>{
+        if(appContext.userType === "surgeon" && location.pathname === "/new-surgery"){
+            navigate("/surgeries");
+    }},[]);
 
     useEffect(() =>{
 

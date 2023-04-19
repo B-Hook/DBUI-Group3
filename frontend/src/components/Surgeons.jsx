@@ -1,11 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { useNavigate, useParams} from "react-router-dom";
 import {Header} from './Header/Header';
 import { getSurgeons } from '../Api';
+import { AppContext } from "../AppContext";
+
 
 export const Surgeons = () => {
 
 
     const [surgeons, setSurgeons] = useState([]);
+
+    const appContext = useContext(AppContext);
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        if(appContext.userType === "surgeon"){
+            navigate("/surgeries");
+    }},[]);
 
     useEffect(() =>{
 
