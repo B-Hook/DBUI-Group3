@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams} from "react-router-dom";
 import { TextField, SelectField, TextAreaField } from "./common";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import _, { filter } from 'underscore';
-import {Header} from './Header/Header';
 import { getSurgeons, getSurgeries, getSurgeryById, createSurgery, editSurgery } from '../Api';
 
 export const Surgery = () => {
@@ -37,6 +35,10 @@ export const Surgery = () => {
     useEffect(() =>{
 
         const fetchData = async () => {
+
+            // Had to use async await here instead of only promises because 
+            // the select field for surgeons would not wait for the surgeons to load in
+            // and hence would appear blank.
 
             await getSurgeons().then(data => {
                 const newData = data.map((surgeon) => {return { ...surgeon, full_name: `${surgeon.first_name} ${surgeon.last_name} - ${surgeon.specialty}`}});
@@ -92,7 +94,11 @@ export const Surgery = () => {
 
     const mergeSurgery = delta => setSurgery({ ...surgery, ...delta });
 
-    const checkFields = () => surgery.patient_name && surgery.specialty && surgery.staff_num && surgery.room_num && surgery.month && surgery.day && surgery.time && surgery.duration;
+    const checkFields = () => surgery.patient_name && surgery.specialty && (surgery.staff_num || surgery.staff_num === 0) && 
+                              Number.isInteger(surgery.staff_num) && surgery.room_num && 
+                              surgery.month && surgery.month < 13 && Number.isInteger(surgery.month) && 
+                              surgery.day && surgery.day < 32 && Number.isInteger(surgery.day) && 
+                              surgery.time && surgery.duration && Number.isInteger(surgery.duration);
 
     const handleSave = () =>{
 
@@ -217,6 +223,7 @@ export const Surgery = () => {
                                     type="number"
                                     value={surgery.staff_num}
                                     setValue={staff_num => mergeSurgery({ staff_num })}
+                                    min={0}
                                     isRequired={true} />
                     </div>
                 </div>
@@ -234,6 +241,7 @@ export const Surgery = () => {
                                     type="number"
                                     value={surgery.month}
                                     setValue={month => mergeSurgery({ month })}
+                                    max={12}
                                     isRequired={true} />
                     </div>
                     <div className="col">
@@ -242,6 +250,7 @@ export const Surgery = () => {
                                     type="number"
                                     value={surgery.day}
                                     setValue={day => mergeSurgery({ day })}
+                                    max={31}
                                     isRequired={true} />
                     </div>
                     <div className="col">

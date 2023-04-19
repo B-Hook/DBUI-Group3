@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export const TextField = ({id, label, value, setValue, isFocused, type="text", isRequired=false}) => {
+export const TextField = ({id, label, value, setValue, isFocused, type="text", isRequired=false, min=1, max=10000}) => {
     const refInput = useRef();
 
     useEffect(() => {
@@ -18,6 +18,8 @@ export const TextField = ({id, label, value, setValue, isFocused, type="text", i
                     type={type}
                     value={value}
                     onChange={event => setValue(event.target.valueAsNumber)}
+                    min={min}
+                    max={max}
                     ref={refInput} required={isRequired}/>:
                 <input id={id} name={id}
                     className="form-control"
