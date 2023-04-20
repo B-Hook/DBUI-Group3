@@ -33,11 +33,14 @@ app.post('/login', (req, res) => {
 
     // Get the user type from the query result
     const userType = rows[0].type;
+    const username = rows[0].username;
+    const id = rows[0].id;
 
     // Perform login actions, such as setting a session or issuing a token
     res.status(200).json({
-      username: req.body.username,
-      userType: userType
+      username: username,
+      userType: userType,
+      id: id
     });
   });
 });
@@ -180,7 +183,7 @@ app.post('/surgeries', (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
-  connection.query(query, [(surgeon_id === '')?null:surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, status, notes, surgeryId], (err, result) => {
+  connection.query(query, [(surgeon_id === '')?null:surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, status, notes], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'An error occurred while creating the surgery' });
     }
