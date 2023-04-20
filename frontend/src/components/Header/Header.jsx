@@ -8,7 +8,7 @@ export const Header = () => {
 
     return <nav class="navbar navbar-expand-lg bg-info p-0">
                 <div class="container-fluid">
-                <a class="navbar-brand fs-3 text-dark" href="/">Hospital</a>
+                <a class="navbar-brand fs-3 text-dark" href="/surgeries">Hospital</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar1" aria-controls="navbar1" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -17,12 +17,16 @@ export const Header = () => {
                             <li class="nav-item header-item">
                                 <a class="nav-link text-dark" href="/surgeries">Surgeries</a>
                             </li>
-                            <li class="nav-item header-item">
-                                <a class="nav-link text-dark" href="/surgeons">Surgeons</a>
-                            </li>
-                            <li class="nav-item header-item">
-                                <a class="nav-link text-dark" href="/new-surgery">Create Surgery</a>
-                            </li>
+
+                            {(appContext.userType === "admin")?<>
+                                <li class="nav-item header-item">
+                                    <a class="nav-link text-dark" href="/surgeons">Surgeons</a>
+                                </li>
+                                <li class="nav-item header-item">
+                                    <a class="nav-link text-dark" href="/new-surgery">Create Surgery</a>
+                                </li>
+                            </>
+                            :<></>}
                         </ul>
                     <span class="navbar-text bg-info text-dark ps-0 ms-0">
                         {appContext.userType}: @{appContext.username}

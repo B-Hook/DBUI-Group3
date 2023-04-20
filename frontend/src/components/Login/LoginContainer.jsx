@@ -13,7 +13,7 @@ export const LoginContainer = ({type}) => {
 
     useEffect(()=>{
         if(appContext.username){
-            navigate("/");
+            navigate("/surgeries");
         }},[]);
 
     const handleSubmit = async e => {
@@ -21,9 +21,10 @@ export const LoginContainer = ({type}) => {
 
         try {
             let data = await authorizeLogin({ username, password, userType });
+            appContext.setId(data.id);
             appContext.setUsername(data.username);
             appContext.setUserType(data.userType);
-            navigate("/");
+            navigate("/surgeries");
         }
         catch (error) {
             console.log(error);

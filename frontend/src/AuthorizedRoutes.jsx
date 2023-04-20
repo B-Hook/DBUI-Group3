@@ -1,8 +1,8 @@
 import Home from "./components/Home/Home";
-import { Surgery, Surgeons, Header } from "./components";
+import { Surgery, Surgeons, Surgeries} from "./components";
 
 export const AuthorizedRoutes = () => [
-    { path: '/', element: <Home />, exact: true },
+    { path: '/surgeries', element: <Surgeries />, exact: true },
     { path: '/surgeons', element: <Surgeons />},
     { path: '/new-surgery', element: <Surgery /> },
     { path: '/surgeries/:id', element: <Surgery /> },
