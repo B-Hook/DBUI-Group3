@@ -79,7 +79,7 @@ export const Surgery = () => {
 
         if (surgery.month !== undefined && surgery.day !== undefined && surgery.time !== undefined && surgery.specialty !== undefined){
 
-            const filteredSurgeries = allSurgeries.filter(x => x.month === surgery.month && x.day === surgery.day && x.time === surgery.time && x.id !== surgery?.id);
+            const filteredSurgeries = allSurgeries.filter(x => (x.status === "pending" || x.status === "accepted") && x.month === surgery.month && x.day === surgery.day && x.time === surgery.time && x.id !== surgery?.id);
 
             setfilteredSurgeons(allSurgeons.filter(x => {
                 if (x.specialty !== surgery.specialty){
