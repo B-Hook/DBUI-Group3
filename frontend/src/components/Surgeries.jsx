@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, useParams} from 'react-router-dom';
 import { getSurgeries, getSurgeriesBySurgeonId, getSurgeons, deleteSurgery, editSurgery } from '../Api'
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { AppContext } from "../AppContext";
@@ -14,6 +14,12 @@ export const Surgeries = () => {
     const [currentTab, setCurrentTab] = useState("all");
 
     const appContext = useContext(AppContext);
+    const location = useLocation();
+    const params = useParams();
+    const navigate = useNavigate();
+
+    const [userType, setuserType] = useState(location.pathname === `/surgeons/${params.id}/surgeries`?"surgeon":appContext.userType);
+    const [userId, setUserId] = useState(location.pathname === `/surgeons/${params.id}/surgeries`?params.id:appContext.id);
 
     const statusTypes = [
         "accepted",
@@ -23,7 +29,13 @@ export const Surgeries = () => {
     ]
 
     useEffect(() =>{
-        ((appContext.userType === "admin")?getSurgeries():getSurgeriesBySurgeonId(appContext.id)).then(data => {  
+        
+
+        if(appContext.userType === "surgeon" && location.pathname === `/surgeons/${params.id}/surgeries`){
+            navigate("/surgeries");
+            window.location.reload();
+        } else{
+        ((userType === "admin")?getSurgeries():getSurgeriesBySurgeonId(userId)).then(data => {  
             const newData = data.map((surgery) => {return { ...surgery, timeInt: (surgery.time === "Morning")?1:(surgery.time === "Afternoon")?2:3}});          
             newData.sort((a,b) => (a.month > b.month) ? 1 : (b.month > a.month) ? -1 : 
                                   (a.day > b.day) ? 1 : (b.day > a.day) ? -1 : 
@@ -36,6 +48,7 @@ export const Surgeries = () => {
         getSurgeons().then(data => setSurgeons(data)).catch(error => console.error('Surgeons do not exist!', error));
 
         document.getElementById("0").style.backgroundColor = "var(--bs-dark)";
+    }
         
     }, []);
 
@@ -67,7 +80,7 @@ export const Surgeries = () => {
     const updateColors = id => {
         var tabsNum = 5
 
-        if (appContext.userType === "surgeon")
+        if (userType === "surgeon")
             tabsNum = 4;
 
         for (let i = 0; i <= tabsNum; ++i) {
@@ -102,8 +115,6 @@ export const Surgeries = () => {
                                                                        .catch(error => console.error('Could not save surgery', error));
     }
 
-    const navigate = useNavigate();
-
     return <>
         <HelmetProvider>
             <Helmet>
@@ -112,10 +123,10 @@ export const Surgeries = () => {
         </HelmetProvider>
         <br/>
         <div className="container">
-            {appContext.userType === "admin"?
+            {userType === "admin"?
                 <h1 className="text-info">All Surgeries</h1>
             :
-                <h1 className="text-info">{getSurgeonName(Number(appContext.id))} - Surgeries </h1>
+                <h1 className="text-info">{getSurgeonName(Number(userId))} - Surgeries </h1>
             }
             <div className="btn-group flex-wrap">
                 <button type={"button"}
@@ -153,7 +164,7 @@ export const Surgeries = () => {
                         }}
                 >Rejected</button>
 
-                {appContext.userType === "surgeon"?<></>:
+                {userType === "surgeon"?<></>:
                     <button type={"button"}
                             id={"5"}
                             className={"btn btn-lg btn-info btn-outline-dark text-white fw-bold"}
@@ -171,7 +182,7 @@ export const Surgeries = () => {
                             updateColors("4");
                             filterSurgeries("completed");
                         }}
-                >Complete</button>
+                >Completed</button>
             </div>
 
             <ul className={"ps-0"}>
@@ -182,7 +193,7 @@ export const Surgeries = () => {
                                 <div className="card-header bg-dark d-flex">
                                     <h3 class="d-inline bg-dark text-info flex-grow-1">{surgery.month}/{surgery.day} - Patient: {surgery.patient_name}</h3>
                                     {surgery.status === "completed"?
-                                        <h3 class="d-inline bg-dark text-light s-100">Complete</h3>
+                                        <h3 class="d-inline bg-dark text-light s-100">Completed</h3>
                                     :surgery.surgeon_id === null?
                                         <h3 class="d-inline bg-dark text-secondary s-100">No Surgeon</h3>
                                     :surgery.status === "pending"?
