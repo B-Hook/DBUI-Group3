@@ -1,7 +1,19 @@
 import { LoginContainer } from "./LoginContainer"
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { useContext, useEffect } from 'react';
+import { AppContext } from "../../AppContext";
+import { useNavigate } from "react-router-dom";
+
 
 export const Login = () => {
+    const appContext = useContext(AppContext);
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        if(appContext.username){
+            navigate("/surgeries");
+    }},[]);
+
     return (
         <div>
             <header className="m-3 text-dark fs-1">

@@ -11,11 +11,6 @@ export const LoginContainer = ({type}) => {
     const navigate = useNavigate();
     const [valid, setValid] = useState(true);
 
-    useEffect(()=>{
-        if(appContext.username){
-            navigate("/surgeries");
-        }},[]);
-
     const handleSubmit = async e => {
         e.preventDefault();
 
