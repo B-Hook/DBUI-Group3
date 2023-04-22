@@ -225,7 +225,7 @@ export const Surgery = () => {
                                 setValue={specialty => mergeSurgery({ specialty })}
                                 options={specializations}
                                 isRequired={true}
-                                isDisabled={true} />
+                                isDisabled={(appContext.userType === "surgeon")? true : false} />
                     </div>
                     <div className="col">
                         <TextField id="staffNum"

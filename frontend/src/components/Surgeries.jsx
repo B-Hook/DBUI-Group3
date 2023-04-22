@@ -11,7 +11,7 @@ export const Surgeries = () => {
     const [surgeries, setSurgeries] = useState([]);
     const [surgeons, setSurgeons] = useState([]);
     const [activeSurgeries, setActiveSurgeries] = useState([]);
-    const [currentTab, setCurrentTab] = useState("pending");
+    const [currentTab, setCurrentTab] = useState("all");
 
     const appContext = useContext(AppContext);
 
@@ -35,7 +35,7 @@ export const Surgeries = () => {
 
         getSurgeons().then(data => setSurgeons(data)).catch(error => console.error('Surgeons do not exist!', error));
 
-        document.getElementById("1").style.backgroundColor = "var(--bs-dark)";
+        document.getElementById("0").style.backgroundColor = "var(--bs-dark)";
         
     }, []);
 
@@ -43,12 +43,14 @@ export const Surgeries = () => {
     
 
     const filterSurgeries = by => {
-        if (by !== "no surgeon"){
-            setActiveSurgeries(surgeries.filter(surgery => surgery.status.includes(by) && surgery.surgeon_id !== null));
+        if (by === "no surgeon"){
+            setActiveSurgeries(surgeries.filter(surgery => surgery.surgeon_id === null && surgery.status !== "completed"));
+        }
+        else if (by === "all"){
+            setActiveSurgeries(surgeries.filter(surgery => surgery.status !== "completed"));
         }
         else {
-            console.log(activeSurgeries);
-            setActiveSurgeries(surgeries.filter(surgery => surgery.surgeon_id === null));
+            setActiveSurgeries(surgeries.filter(surgery => surgery.status.includes(by) && surgery.surgeon_id !== null));
         }
         setCurrentTab(by);
     }
@@ -61,8 +63,11 @@ export const Surgeries = () => {
 
     const updateColors = id => {
         var tabsNum = 5
-        if (appContext.userType === "surgeon") tabsNum = 4
-        for (let i = 1; i <= tabsNum; ++i) {
+
+        if (appContext.userType === "surgeon")
+            tabsNum = 4;
+
+        for (let i = 0; i <= tabsNum; ++i) {
             // change the active button to dark
             if (i.toString() === id) {
                 document.getElementById(id).style.backgroundColor = "var(--bs-dark)";
@@ -104,8 +109,20 @@ export const Surgeries = () => {
         </HelmetProvider>
         <br/>
         <div className="container">
-            <h1 className="text-info">All Surgeries</h1>
+            {appContext.userType === "admin"?
+                <h1 className="text-info">All Surgeries</h1>
+            :
+                <h1 className="text-info">{getSurgeonName(appContext.id)} - Surgeries </h1>
+            }
             <div className="btn-group flex-wrap">
+                <button type={"button"}
+                        id={"0"}
+                        className={"btn btn-lg btn-info btn-outline-dark text-white fw-bold"}
+                        onClick={() => {
+                            updateColors("0");
+                            filterSurgeries("all");
+                        }}
+                >All Scheduled</button>
                 <button type={"button"}
                         id={"1"}
                         className={"btn btn-lg btn-info btn-outline-dark text-white fw-bold"}
@@ -159,7 +176,21 @@ export const Surgeries = () => {
                     activeSurgeries.map((surgery) =>
                         <li className="list-group-item" key={surgery.id}>
                             <div className="card bg-info text-dark mb-2">
-                                <h3 class="card-header bg-dark text-info">{surgery.month}/{surgery.day} - Patient: {surgery.patient_name}</h3>
+                                <div className="card-header bg-dark d-flex">
+                                    <h3 class="d-inline bg-dark text-info flex-grow-1">{surgery.month}/{surgery.day} - Patient: {surgery.patient_name}</h3>
+                                    {surgery.status === "completed"?
+                                        <h3 class="d-inline bg-dark text-light s-100">Complete</h3>
+                                    :surgery.surgeon_id === null?
+                                        <h3 class="d-inline bg-dark text-secondary s-100">No Surgeon</h3>
+                                    :surgery.status === "pending"?
+                                        <h3 class="d-inline bg-dark text-warning s-100">Pending</h3>
+                                    :surgery.status === "accepted"?
+                                        <h3 class="d-inline bg-dark text-success s-100">Accepted</h3>
+                                    :surgery.status === "rejected"?
+                                        <h3 class="d-inline bg-dark text-danger s-100">Rejected</h3>
+                                    :<></>
+                                    }
+                                </div>
                                 <div class="card-body">
                                     <div className="row align-items-center">
                                         <div className="col">
@@ -170,7 +201,7 @@ export const Surgeries = () => {
                                             <h5>Operating Room: {surgery.room_num}</h5>
                                         </div>
                                         <div className="col">
-                                            {appContext.userType === "surgeon" && currentTab === "pending"?
+                                            {appContext.userType === "surgeon" && surgery.status === "pending"?
                                             <>
                                                 <button type={"button"}
                                                     className={"d-block btn btn-lg btn-dark col-12 mb-3"}
@@ -182,7 +213,7 @@ export const Surgeries = () => {
                                                     className={"d-block btn btn-lg btn-danger col-12"}
                                                     onClick={() => changeStatus(surgery.id, "rejected")}>Reject</button>
                                             </>:
-                                            appContext.userType === "surgeon" && currentTab === "accepted"?
+                                            appContext.userType === "surgeon" && surgery.status === "accepted"?
                                             <>
                                                 <button type={"button"}
                                                     className={"d-block btn btn-lg btn-dark col-12 mb-3"}
@@ -191,7 +222,7 @@ export const Surgeries = () => {
                                                     className={"d-block btn btn-lg btn-secondary col-12"}
                                                     onClick={() => changeStatus(surgery.id, "completed")}>Completed</button>
                                             </>
-                                            :appContext.userType === "admin" && currentTab !== "completed"?
+                                            :appContext.userType === "admin" && surgery.status !== "completed"?
                                             <>
                                                 <button type={"button"}
                                                     className={"d-block btn btn-lg btn-dark col-12 mb-3"}
