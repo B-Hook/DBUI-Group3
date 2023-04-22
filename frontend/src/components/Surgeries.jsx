@@ -49,6 +49,9 @@ export const Surgeries = () => {
         else if (by === "all"){
             setActiveSurgeries(surgeries.filter(surgery => surgery.status !== "completed"));
         }
+        else if (by === "completed"){
+            setActiveSurgeries(surgeries.filter(surgery => surgery.status === "completed"));
+        }
         else {
             setActiveSurgeries(surgeries.filter(surgery => surgery.status.includes(by) && surgery.surgeon_id !== null));
         }
