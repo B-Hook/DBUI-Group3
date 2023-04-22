@@ -191,14 +191,29 @@ export const Surgeries = () => {
                                     :<></>
                                     }
                                 </div>
-                                <div class="card-body">
+                                <div className="card-body">
                                     <div className="row align-items-center">
                                         <div className="col">
-                                            <h5>Assigned Surgeon: {getSurgeonName(surgery.surgeon_id)}</h5>
-                                            <h5>Surgery Type: {surgery.specialty}</h5>
-                                            <h5>Time: {surgery.time}</h5>
-                                            <h5>Duration: {surgery.duration} Minutes</h5>
-                                            <h5>Operating Room: {surgery.room_num}</h5>
+                                            <div className="p-1">
+                                                <h5 className="fw-bold d-inline">Assigned Surgeon: </h5>
+                                                <h5 className="d-inline">{getSurgeonName(surgery.surgeon_id)}</h5>
+                                            </div>
+                                            <div className="p-1">
+                                                <h5 className="fw-bold d-inline">Surgery Type: </h5>
+                                                <h5 className="d-inline">{surgery.specialty}</h5>
+                                            </div>
+                                            <div className="p-1">
+                                                <h5 className="fw-bold d-inline">Time: </h5>
+                                                <h5 className="d-inline">{surgery.time}</h5>
+                                            </div>
+                                            <div className="p-1">
+                                                <h5 className="fw-bold d-inline">Duration: </h5>
+                                                <h5 className="d-inline">{surgery.duration} Minutes</h5>
+                                            </div>
+                                            <div className="p-1">
+                                                <h5 className="fw-bold d-inline">Operating Room: </h5>
+                                                <h5 className="d-inline">{surgery.room_num}</h5>
+                                            </div>
                                         </div>
                                         <div className="col">
                                             {appContext.userType === "surgeon" && surgery.status === "pending"?
