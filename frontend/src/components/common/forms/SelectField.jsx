@@ -1,4 +1,4 @@
-export const SelectField = ({ id, label, value, setValue, options, optionValueKey, optionLabelKey, hideBlankOption, isRequired=false, inline=false }) => {
+export const SelectField = ({ id, label, value, setValue, options, optionValueKey, optionLabelKey, hideBlankOption, isRequired=false, inline=false, isDisabled=false }) => {
     return <>
     {!inline?
         <div className="form-group mb-3">
@@ -8,7 +8,8 @@ export const SelectField = ({ id, label, value, setValue, options, optionValueKe
                 value={value}
                 onChange={event => setValue(event.target.value)}
                 className="form-control"
-                required={isRequired}>
+                required={isRequired}
+                disabled={isDisabled}>
                 { !hideBlankOption && <option></option> }
                 {
                     options.map((option, index) => <option key={index}

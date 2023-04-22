@@ -213,7 +213,8 @@ export const Surgery = () => {
                                 label="Patient Name"
                                 value={surgery.patient_name}
                                 setValue={ patient_name => mergeSurgery({ patient_name })}
-                                isRequired={true} />
+                                isRequired={true}
+                                isDisabled={(appContext.userType === "surgeon")? true : false} />
                     <div class="valid-feedback">Valid.</div>
                     <div class="invalid-feedback">Please fill out this field.</div>
                     </div>
@@ -223,7 +224,8 @@ export const Surgery = () => {
                                 value={surgery.specialty}
                                 setValue={specialty => mergeSurgery({ specialty })}
                                 options={specializations}
-                                isRequired={true} />
+                                isRequired={true}
+                                isDisabled={true} />
                     </div>
                     <div className="col">
                         <TextField id="staffNum"
@@ -232,7 +234,8 @@ export const Surgery = () => {
                                     value={surgery.staff_num}
                                     setValue={staff_num => mergeSurgery({ staff_num })}
                                     min={0}
-                                    isRequired={true} />
+                                    isRequired={true}
+                                    isDisabled={(appContext.userType === "surgeon")? true : false} />
                     </div>
                 </div>
                 <div className="row align-items-start was-validated">
@@ -241,7 +244,8 @@ export const Surgery = () => {
                                     label="Room"
                                     value={surgery.room_num}
                                     setValue={room_num => mergeSurgery({ room_num })}
-                                    isRequired={true} />
+                                    isRequired={true}
+                                    isDisabled={(appContext.userType === "surgeon")? true : false} />
                     </div>
                     <div className="col">
                         <TextField id="month"
@@ -250,7 +254,8 @@ export const Surgery = () => {
                                     value={surgery.month}
                                     setValue={month => mergeSurgery({ month })}
                                     max={12}
-                                    isRequired={true} />
+                                    isRequired={true}
+                                    isDisabled={(appContext.userType === "surgeon")? true : false} />
                     </div>
                     <div className="col">
                         <TextField id="day"
@@ -259,7 +264,8 @@ export const Surgery = () => {
                                     value={surgery.day}
                                     setValue={day => mergeSurgery({ day })}
                                     max={31}
-                                    isRequired={true} />
+                                    isRequired={true}
+                                    isDisabled={(appContext.userType === "surgeon")? true : false} />
                     </div>
                     <div className="col">
                         <SelectField id="time"
@@ -268,7 +274,8 @@ export const Surgery = () => {
                                     value={surgery.time}
                                     setValue={time => mergeSurgery({ time })}
                                     options={times}
-                                    isRequired={true}/>
+                                    isRequired={true}
+                                    isDisabled={(appContext.userType === "surgeon")? true : false}/>
                     </div>
                     <div className="col">
                         <TextField id="duration"
@@ -276,7 +283,8 @@ export const Surgery = () => {
                                     type="number"
                                     value={surgery.duration}
                                     setValue={duration => mergeSurgery({ duration })}
-                                    isRequired={true}/>
+                                    isRequired={true}
+                                    isDisabled={(appContext.userType === "surgeon")? true : false}/>
                     </div>
                 </div>
                 {location.pathname === `/surgeries/${params.id}` || checkFields()?
@@ -287,7 +295,8 @@ export const Surgery = () => {
                                     setValue={surgeon_id => mergeSurgery({ surgeon_id })}
                                     options={filteredSurgeons}
                                     optionValueKey="id"
-                                    optionLabelKey="full_name"/>
+                                    optionLabelKey="full_name"
+                                    isDisabled={(appContext.userType === "surgeon")? true : false}/>
                     </div>
                     :<div className="p-3 mb-3 fs-6 bg-info text-dark rounded">
                         Enter the information above to select a surgeon!
