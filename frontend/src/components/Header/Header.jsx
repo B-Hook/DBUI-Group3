@@ -32,7 +32,8 @@ export const Header = () => {
                         {appContext.userType}: @{appContext.username}
                     </span>
                     <button className="btn btn-danger me-2" onClick={() => {appContext.setUsername(undefined);
-                                            appContext.setUserType(undefined);} }>Logout</button>
+                                            appContext.setUserType(undefined);
+                                            appContext.setId(undefined);} }>Logout</button>
                     </div>
                 </div>
 </nav>

@@ -115,7 +115,7 @@ export const Surgeries = () => {
             {appContext.userType === "admin"?
                 <h1 className="text-info">All Surgeries</h1>
             :
-                <h1 className="text-info">{getSurgeonName(appContext.id)} - Surgeries </h1>
+                <h1 className="text-info">{getSurgeonName(Number(appContext.id))} - Surgeries </h1>
             }
             <div className="btn-group flex-wrap">
                 <button type={"button"}
