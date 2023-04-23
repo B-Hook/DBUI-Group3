@@ -18,7 +18,6 @@ export const Surgery = () => {
         "Obstetrics and Gynecology",
         "Oncology",
         "Ophthalmic",
-        "Thoracic",
         "Trauma Surgery",
         "Spine"
     ];
@@ -29,6 +28,9 @@ export const Surgery = () => {
     const [ allSurgeons, setAllSurgeons ] = useState([]);
     const [ filteredSurgeons, setfilteredSurgeons ] = useState([]);
 
+    const d = new Date();
+    const [ month, setMonth ] = useState(d.getMonth())
+    const [ day, setDay ] = useState(1)
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -100,12 +102,22 @@ export const Surgery = () => {
 
     },[surgery.month, surgery.day, surgery.time, surgery.specialty]);
 
+    useEffect(() =>{
+        if (surgery.month === month + 1){
+            setDay(d.getDate())
+        }
+        else{
+            setDay(1);
+        }
+
+    },[surgery.month]);
+
     const mergeSurgery = delta => setSurgery({ ...surgery, ...delta });
 
     const checkFields = () => surgery.patient_name && surgery.specialty && (surgery.staff_num || surgery.staff_num === 0) && 
                               Number.isInteger(surgery.staff_num) && surgery.room_num && 
-                              surgery.month && surgery.month < 13 && Number.isInteger(surgery.month) && 
-                              surgery.day && surgery.day < 32 && Number.isInteger(surgery.day) && 
+                              surgery.month && surgery.month < 13 && surgery.month > month && Number.isInteger(surgery.month) && 
+                              surgery.day && surgery.day < 32 && surgery.day >= day && Number.isInteger(surgery.day) && 
                               surgery.time && surgery.duration && Number.isInteger(surgery.duration);
 
     const handleSave = () =>{
@@ -253,6 +265,7 @@ export const Surgery = () => {
                                     type="number"
                                     value={surgery.month}
                                     setValue={month => mergeSurgery({ month })}
+                                    min={month + 1}
                                     max={12}
                                     isRequired={true}
                                     isDisabled={(appContext.userType === "surgeon")? true : false} />
@@ -263,6 +276,7 @@ export const Surgery = () => {
                                     type="number"
                                     value={surgery.day}
                                     setValue={day => mergeSurgery({ day })}
+                                    min={day}
                                     max={31}
                                     isRequired={true}
                                     isDisabled={(appContext.userType === "surgeon")? true : false} />
