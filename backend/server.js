@@ -62,6 +62,19 @@ app.get('/surgeons/:id', (req, res) => {
   });
 });
 
+app.get('/surgeons/search', (req, res) => {
+  const { name } = req.query;
+
+  connection.query('SELECT * FROM users WHERE type = "surgeon" AND first_name LIKE ? OR last_name LIKE ?', [`%${name}%`, `%${name}%`], (err, rows, fields) => {
+    if (err) {
+      return res.status(500).json({ error: 'An error occurred while searching users by name' });
+    }
+
+    res.status(200).json(rows);
+  });
+});
+
+
 app.post('/surgeons', (req, res) => {
   const { first_name, last_name, username, password, type, specialty } = req.body;
 
@@ -131,6 +144,7 @@ app.delete('/surgeons/:id', (req, res) => {
 });
 
 
+
 app.get('/surgeries', (req, res) => {
   connection.query('SELECT * FROM surgeries', (err, rows, fields) => {
     if (err) {
@@ -157,7 +171,7 @@ app.get('/surgeries/:id', (req, res) => {
   });
 });
 
-app.get('/surgeries/surgeon/:surgeon_id', (req, res) => {
+app.get('/surgeons/:surgeon_id/surgeries', (req, res) => {
   const surgeon_id = req.params.surgeon_id;
 
   connection.query('SELECT * FROM surgeries WHERE surgeon_id = ?', [surgeon_id], (err, rows, fields) => {
@@ -172,6 +186,17 @@ app.get('/surgeries/surgeon/:surgeon_id', (req, res) => {
     res.status(200).json(rows);
   });
 });
+
+app.get('/surgeries/counts', (req, res) => {
+  const countQuery = `SELECT status, COUNT(*) as count FROM surgeries GROUP BY status`;
+  connection.query(countQuery, (err, rows, fields) => {
+    if (err) {
+      return res.status(500).json({ error: 'An error occurred while fetching surgery counts' });
+    }
+    res.status(200).json(rows);
+  });
+});
+
 
 app.post('/surgeries', (req, res) => {
   const { surgeon_id, patient_name, staff_num, month, day, time, duration, room_num, specialty, notes } = req.body;
