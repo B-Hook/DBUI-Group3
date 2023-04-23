@@ -62,18 +62,6 @@ app.get('/surgeons/:id', (req, res) => {
   });
 });
 
-app.get('/surgeons/search', (req, res) => {
-  const { name } = req.query;
-
-  connection.query('SELECT * FROM users WHERE type = "surgeon" AND first_name LIKE ? OR last_name LIKE ?', [`%${name}%`, `%${name}%`], (err, rows, fields) => {
-    if (err) {
-      return res.status(500).json({ error: 'An error occurred while searching users by name' });
-    }
-
-    res.status(200).json(rows);
-  });
-});
-
 
 app.post('/surgeons', (req, res) => {
   const { first_name, last_name, username, password, type, specialty } = req.body;
@@ -144,13 +132,21 @@ app.delete('/surgeons/:id', (req, res) => {
 });
 
 
-
 app.get('/surgeries', (req, res) => {
   connection.query('SELECT * FROM surgeries', (err, rows, fields) => {
     if (err) {
       return res.status(500).json({ error: 'An error occurred while fetching surgeries' });
     }
 
+    res.status(200).json(rows);
+  });
+});
+app.get('/surgeries/counts', (req, res) => {
+  const countQuery = `SELECT status, COUNT(*) as count FROM surgeries GROUP BY status`;
+  connection.query(countQuery, (err, rows, fields) => {
+    if (err) {
+      return res.status(500).json({ error: 'An error occurred while fetching surgery counts' });
+    }
     res.status(200).json(rows);
   });
 });
@@ -171,7 +167,8 @@ app.get('/surgeries/:id', (req, res) => {
   });
 });
 
-app.get('/surgeons/:surgeon_id/surgeries', (req, res) => {
+
+app.get('/surgeries/surgeon/:surgeon_id', (req, res) => {
   const surgeon_id = req.params.surgeon_id;
 
   connection.query('SELECT * FROM surgeries WHERE surgeon_id = ?', [surgeon_id], (err, rows, fields) => {
@@ -183,16 +180,6 @@ app.get('/surgeons/:surgeon_id/surgeries', (req, res) => {
       return res.status(404).json({ error: 'Surgeries not found' });
     }
 
-    res.status(200).json(rows);
-  });
-});
-
-app.get('/surgeries/counts', (req, res) => {
-  const countQuery = `SELECT status, COUNT(*) as count FROM surgeries GROUP BY status`;
-  connection.query(countQuery, (err, rows, fields) => {
-    if (err) {
-      return res.status(500).json({ error: 'An error occurred while fetching surgery counts' });
-    }
     res.status(200).json(rows);
   });
 });
@@ -217,20 +204,20 @@ app.post('/surgeries', (req, res) => {
   });
 });
 app.delete('/surgeries/:id', (req, res) => {
-    const id = req.params.id;
+    const id = req.params.id;
   
-    connection.query('DELETE FROM surgeries WHERE id = ?', [id], (err, result) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({ error: 'An error occurred while deleting the surgery' });
-      }
+    connection.query('DELETE FROM surgeries WHERE id = ?', [id], (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ error: 'An error occurred while deleting the surgery' });
+      }
   
-      if (result.affectedRows === 0) {
-        return res.status(404).json({ error: 'Surgery not found' });
-      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Surgery not found' });
+      }
   
-      res.status(200).json({ message: 'Surgery deleted successfully' });
-    });
+      res.status(200).json({ message: 'Surgery deleted successfully' });
+    });
   });
 
 app.put('/surgeries/:id', (req,res) => {
