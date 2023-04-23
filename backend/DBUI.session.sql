@@ -99,10 +99,10 @@ VALUES  (1, 'Alice Brown', 3, 3, 12, 'Morning', 60, '1A', 'Neurological', 'pendi
         (17, 'Marilyn Ramirez', 2, 8, 15, 'Morning', 40, '12C', 'Trauma Surgery', 'accepted', 'Monitor patient for signs of infection.'),
         (18, 'Samuel Price', 1, 3, 28, 'Afternoon', 70, '13C', 'Obstetrics and Gynecology', 'pending', 'Coordinate with the patients obstetrician.'),
         (NULL, 'Arthur Bennett', 2, 3, 14, 'Morning', 90, '18B', 'Obstetrics and Gynecology', 'pending', 'Seeking an available surgeon for this procedure.'),
-        (4, 'Cynthia Morgan', 1, 5, 22, 'Afternoon', 120, '19A', 'Oncology', 'Rejected', 'Surgery rejected due to insufficient diagnostic information.'),
+        (4, 'Cynthia Morgan', 1, 5, 22, 'Afternoon', 120, '19A', 'Oncology', 'rejected', 'Surgery rejected due to insufficient diagnostic information.'),
         (NULL, 'Danielle Brooks', 3, 8, 7, 'Morning', 60, '20B', 'Trauma Surgery', 'pending', 'In need of a trauma surgeon for this case.'),
-        (9, 'Edward Alvarez', 2, 6, 16, 'Afternoon', 45, '21A', 'Spine', 'Rejected', 'Surgery rejected due to contraindications.'),
+        (9, 'Edward Alvarez', 2, 6, 16, 'Afternoon', 45, '21A', 'Spine', 'rejected', 'Surgery rejected due to contraindications.'),
         (NULL, 'Fiona Long', 1, 11, 30, 'Morning', 75, '22B', 'Spine', 'pending', 'Looking for a spine surgeon for this patient.'),
-        (19, 'Grace Newman', 3, 10, 25, 'Afternoon', 100, '23A', 'Neurological', 'Rejected', 'Surgery rejected due to high-risk factors.'),
+        (19, 'Grace Newman', 3, 10, 25, 'Afternoon', 100, '23A', 'Neurological', 'rejected', 'Surgery rejected due to high-risk factors.'),
         (NULL, 'Hannah Kelly', 2, 4, 4, 'Morning', 90, '24B', 'Oncology', 'pending', 'Seeking an oncologist for this case.'),
-        (20, 'Isaac Jordan', 1, 7, 19, 'Afternoon', 60, '25A', 'Ophthalmic', 'Rejected', 'Surgery rejected due to better non-surgical alternatives.');
+        (20, 'Isaac Jordan', 1, 7, 19, 'Afternoon', 60, '25A', 'Ophthalmic', 'rejected', 'Surgery rejected due to better non-surgical alternatives.');
