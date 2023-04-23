@@ -118,18 +118,27 @@ app.put('/surgeons/:id', (req, res) => {
 app.delete('/surgeons/:id', (req, res) => {
   const userId = req.params.id;
 
-  connection.query('DELETE FROM users WHERE id = ? AND type = "surgeon"', [userId], (err, result) => {
+  // Set surgeon_id to null for all surgeries associated with the surgeon
+  connection.query('UPDATE surgeries SET surgeon_id = NULL WHERE surgeon_id = ?', [userId], (err, result) => {
     if (err) {
-      return res.status(500).json({ error: 'An error occurred while deleting the surgeon' });
+      return res.status(500).json({ error: 'An error occurred while updating the surgeries' });
     }
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Surgeon not found' });
-    }
+    // Delete the surgeon after updating the surgeries
+    connection.query('DELETE FROM users WHERE id = ? AND type = "surgeon"', [userId], (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: 'An error occurred while deleting the surgeon' });
+      }
 
-    res.status(200).json({ message: 'Surgeon deleted successfully' });
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Surgeon not found' });
+      }
+
+      res.status(200).json({ message: 'Surgeon deleted successfully' });
+    });
   });
 });
+
 
 
 app.get('/surgeries', (req, res) => {
