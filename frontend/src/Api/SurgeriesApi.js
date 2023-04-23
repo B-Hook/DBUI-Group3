@@ -18,7 +18,7 @@ export const getSurgeryById = async (id) => {
 
 export const getSurgeriesBySurgeonId = async (surgeon_id) => {
     console.log(surgeon_id);
-    const res = await fetch(`http://localhost:8080/surgeries/surgeon/${surgeon_id}`);
+    const res = await fetch(`http://localhost:8080/surgeons/${surgeon_id}/surgeries`);
     if (!res.ok) {
         throw new Error(`This is an HTTP error: The status is ${res.status}`);
     }
