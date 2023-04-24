@@ -10,7 +10,7 @@ export const TextField = ({id, label, value, setValue, isFocused, type="text", i
     }, [ isFocused ]);
 
     return <>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3" id={"textfield"+id}>
             <label className="pb-2" htmlFor={ id }>{label}</label>
             {type === "number"?
                 <input id={id} name={id}
