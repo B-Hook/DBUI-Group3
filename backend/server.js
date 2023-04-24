@@ -76,13 +76,14 @@ app.get('/surgeons/filter/specialty', (req, res) => {
 
 
 app.post('/surgeons', (req, res) => {
-  const { first_name, last_name, username, password, type, specialty } = req.body;
+  const { first_name, last_name, username, password, specialty } = req.body;
+  const type = 'surgeon';
 
   // Check if the user type is valid
-  const validUserTypes = ['surgeon'];
-  if (!validUserTypes.includes(type)) {
-    return res.status(400).json({ error: 'Invalid user type' });
-  }
+  // const validUserTypes = ['surgeon'];
+  // if (!validUserTypes.includes(type)) {
+  //   return res.status(400).json({ error: 'Invalid user type' });
+  // }
 
   // Your code to create a new user
   const query = `
@@ -218,7 +219,7 @@ app.get('/surgeries/:id', (req, res) => {
 });
 
 
-app.get('/surgeries/surgeon/:surgeon_id', (req, res) => {
+app.get('/surgeon/:surgery_id/surgeries', (req, res) => {
   const surgeon_id = req.params.surgeon_id;
 
   connection.query('SELECT * FROM surgeries WHERE surgeon_id = ?', [surgeon_id], (err, rows, fields) => {
