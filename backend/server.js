@@ -219,7 +219,7 @@ app.get('/surgeries/:id', (req, res) => {
 });
 
 
-app.get('/surgeon/:surgery_id/surgeries', (req, res) => {
+app.get('/surgeons/:surgeon_id/surgeries', (req, res) => {
   const surgeon_id = req.params.surgeon_id;
 
   connection.query('SELECT * FROM surgeries WHERE surgeon_id = ?', [surgeon_id], (err, rows, fields) => {
