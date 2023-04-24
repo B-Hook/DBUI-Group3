@@ -61,6 +61,18 @@ app.get('/surgeons/:id', (req, res) => {
     res.send(rows);
   });
 });
+app.get('/surgeons/filter/specialty', (req, res) => {
+  const { specialty } = req.query;
+
+  connection.query('SELECT * FROM users WHERE specialty = ?', [specialty], (err, rows, fields) => {
+    if (err) {
+      return res.status(500).json({ error: 'An error occurred while filtering users by specialty' });
+    }
+
+    res.status(200).json(rows);
+  });
+});
+
 
 
 app.post('/surgeons', (req, res) => {
@@ -114,6 +126,35 @@ app.put('/surgeons/:id', (req, res) => {
     res.status(200).json({ message: 'Surgeon updated successfully' });
   });
 });
+
+app.get('/surgeons/:id/pending_surgeries', (req, res) => {
+  connection.query('SELECT * FROM surgeries WHERE surgeon_id = ? AND status = "pending"', [req.params.id], (err, rows, fields) => {
+    if (err) {
+      return res.status(500).json({ error: 'An error occurred while fetching the surgeon\'s pending surgeries' });
+    }
+    res.status(200).json(rows);
+  });
+});
+
+app.get('/surgeons/:id/rejected_surgeries', (req, res) => {
+  connection.query('SELECT * FROM surgeries WHERE surgeon_id = ? AND status = "rejected"', [req.params.id], (err, rows, fields) => {
+    if (err) {
+      return res.status(500).json({ error: 'An error occurred while fetching the surgeon\'s rejected surgeries' });
+    }
+    res.status(200).json(rows);
+  });
+});
+
+app.get('/surgeons/:id/accepted_surgeries', (req, res) => {
+  connection.query('SELECT * FROM surgeries WHERE surgeon_id = ? AND status = "accepted"', [req.params.id], (err, rows, fields) => {
+    if (err) {
+      return res.status(500).json({ error: 'An error occurred while fetching the surgeon\'s accepted surgeries' });
+    }
+    res.status(200).json(rows);
+  });
+});
+
+
 
 app.delete('/surgeons/:id', (req, res) => {
   const userId = req.params.id;
@@ -192,6 +233,33 @@ app.get('/surgeries/surgeon/:surgeon_id', (req, res) => {
     res.status(200).json(rows);
   });
 });
+
+app.get('/surgeries/filter/location', (req, res) => {
+  const { location } = req.query;
+
+  connection.query('SELECT * FROM surgeries WHERE room_num = ?', [location], (err, rows, fields) => {
+    if (err) {
+      //console.error(err); 
+      return res.status(500).json({ error: 'An error occurred while filtering surgeries by location' });
+    }
+
+    res.status(200).json(rows);
+  });
+});
+
+app.get('/surgeries/filter/specialty', (req, res) => {
+  const { specialty } = req.query;
+
+  connection.query('SELECT * FROM surgeries WHERE specialty = ?', [specialty], (err, rows, fields) => {
+    if (err) {
+      return res.status(500).json({ error: 'An error occurred while filtering surgeries by specialty' });
+    }
+
+    res.status(200).json(rows);
+  });
+});
+
+
 
 
 app.post('/surgeries', (req, res) => {
