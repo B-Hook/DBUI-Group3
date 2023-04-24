@@ -20,9 +20,8 @@ const connection = mysql.createConnection({
 
 connection.connect()
 
-
 app.post('/login', (req, res) => {
-  connection.query(`SELECT * FROM users WHERE username = '${req.body.username}' AND password = '${req.body.password}' AND type = '${req.body.userType}'`, (err, rows, fields) => {
+  connection.query('SELECT * FROM users WHERE username = ? AND password = ? AND type = ?', [req.body.username, req.body.password, req.body.userType], (err, rows, fields) => {
     if (err) {
       return res.status(500).json({ error: 'An error occurred during the login process' });
     }
@@ -54,13 +53,19 @@ app.get('/surgeons', (req, res) => {
 });
 
 app.get('/surgeons/:id', (req, res) => {
-  connection.query(`SELECT * FROM users WHERE id = ${req.params.id} AND type = 'surgeon'`, (err, rows, fields) => {
-    if (err) throw err;
+  connection.query('SELECT * FROM users WHERE id = ? AND type = "surgeon"', [req.params.id], (err, rows, fields) => {
+    if (err) {
+      return res.status(500).json({ error: 'An error occurred while retrieving the surgeon' });
+    }
 
-    res.status(200);
-    res.send(rows);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Surgeon not found' });
+    }
+
+    res.status(200).json(rows[0]);
   });
 });
+
 app.get('/surgeons/filter/specialty', (req, res) => {
   const { specialty } = req.query;
 
@@ -77,29 +82,40 @@ app.get('/surgeons/filter/specialty', (req, res) => {
 
 app.post('/surgeons', (req, res) => {
   const { first_name, last_name, username, password, specialty } = req.body;
-  const type = 'surgeon';
+  const type = 'surgeon'
 
-  // Check if the user type is valid
-  // const validUserTypes = ['surgeon'];
-  // if (!validUserTypes.includes(type)) {
-  //   return res.status(400).json({ error: 'Invalid user type' });
-  // }
-
-  // Your code to create a new user
-  const query = `
-    INSERT INTO users (first_name, last_name, username, password, type, specialty)
-    VALUES (?, ?, ?, ?, ?, ?)
-  `;
-
-  connection.query(query, [first_name, last_name, username, password, type, specialty], (err, result) => {
+  // Check if the username already exists
+  connection.query('SELECT * FROM users WHERE username = ?', [username], (err, rows, fields) => {
     if (err) {
-      return res.status(500).json({ error: 'An error occurred while creating the surgeon' });
+      return res.status(500).json({ error: 'An error occurred while checking for duplicate usernames' });
     }
 
-    res.status(200).json({ message: 'Surgeon created successfully', userId: result.insertId });
+    if (rows.length > 0) {
+      return res.status(401).json({ error: 'Username already exists' });
+    }
+
+    // Create a new user
+    const query = `
+      INSERT INTO users (first_name, last_name, username, password, type, specialty)
+      VALUES (?, ?, ?, ?, ?, ?)
+      `;
+
+    connection.query(query, [first_name, last_name, username, password, type, specialty], (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: 'An error occurred while creating the surgeon' });
+      }
+
+      res.status(200).json({
+        id: result.insertId,
+        first_name,
+        last_name,
+        username,
+        userType: type,
+        specialty
+      });
+    });
   });
 });
-
 app.put('/surgeons/:id', (req, res) => {
   const { first_name, last_name, username, password, type, specialty } = req.body;
   const userId = req.params.id;
