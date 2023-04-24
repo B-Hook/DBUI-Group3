@@ -61,7 +61,7 @@ export const Surgeons = () => {
 
     const handleDelete = (s) => {
         console.log(s.id)
-        if (window.confirm(`Are you sure you want to delete ${s.id}?`)) {
+        if (window.confirm(`Are you sure you want to delete ${s.first_name} ${s.last_name}?`)) {
             deleteSurgeon(s.id).then(() => {
                 setSurgeons(surgeons.filter(x => x.id !== s.id));
             });

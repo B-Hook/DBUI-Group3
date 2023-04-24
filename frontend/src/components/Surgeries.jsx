@@ -97,7 +97,7 @@ export const Surgeries = () => {
 
     const handleDelete = (s) => {
         console.log(s.id)
-        if (window.confirm(`Are you sure you want to delete ${s.id}?`)) {
+        if (window.confirm(`Are you sure you want to delete the surgery for ${s.patient_name}?`)) {
             deleteSurgery(s.id).then(() => {
                 setSurgeries(surgeries.filter(x => x.id !== s.id));
                 // setActiveSurgeries(surgeries.filter(x => x.id !== s.id).filter(surgery => (currentTab === "no surgeon"? surgery.surgeon_id === null:surgery.status.includes(currentTab) && surgery.surgeon_id !== null)));
