@@ -255,7 +255,7 @@ export const Surgeries = () => {
                                             <>
                                                 <button type={"button"}
                                                     className={"d-block btn btn-lg btn-dark col-12 mb-3"}
-                                                    onClick={() => navigate(`${surgery.id}`)}>View & Edit</button>
+                                                    onClick={() => navigate(`/surgeries/${surgery.id}`)}>View & Edit</button>
                                                 <button type={"button"}
                                                     className={"d-block btn btn-lg btn-danger col-12 mb-3"}
                                                     onClick={() => handleDelete(surgery)}>Delete</button>

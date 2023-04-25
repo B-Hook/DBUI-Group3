@@ -17,7 +17,7 @@ export const Login = () => {
     return (
         <div>
             <header className="m-3 text-dark fs-1">
-                <h1>Hosptial Scheduler</h1>
+                <h1>Hospital Scheduler</h1>
             </header>
             <HelmetProvider>
                 <Helmet>
