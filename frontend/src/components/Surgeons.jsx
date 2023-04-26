@@ -50,7 +50,8 @@ export const Surgeons = () => {
         
         createSurgeon(newSurgeon).then(data => mergeSurgeons(data))
                                  .then(()=>{setNewSurgeon(blankSurgeon);
-                                            setValid(true);})
+                                            setValid(true);
+                                            window.alert("New Surgeon has been created");})
                                  .catch(error => {console.error('Could not save Surgeon', error);
                                  setValid(false);
                                  document.getElementById("textfieldusername").classList.remove("mb-3");
