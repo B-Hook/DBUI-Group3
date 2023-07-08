@@ -1,5 +1,5 @@
 export const getSurgeons = async () => {
-    const res = await fetch('https://ec2-3-134-103-222.us-east-2.compute.amazonaws.com:8000/surgeons');
+    const res = await fetch('https://172.18.0.3:8000/surgeons');
     if (!res.ok) {
         throw new Error(`This is an HTTP error: The status is ${res.status}`);
     }
@@ -15,7 +15,7 @@ export const createSurgeon = async (surgeon) => {
         body: JSON.stringify( surgeon )
     };
 
-    const res = await fetch('https://ec2-3-134-103-222.us-east-2.compute.amazonaws.com:8000/surgeons', req)
+    const res = await fetch('https://172.18.0.3:8000/surgeons', req)
     if (!res.ok) {
         throw new Error(`This is an HTTP error: The status is ${res.status}`);
     }
@@ -26,7 +26,7 @@ export const createSurgeon = async (surgeon) => {
 
 export const deleteSurgeon = async (id) => {
 
-    const res = await fetch(`https://ec2-3-134-103-222.us-east-2.compute.amazonaws.com:8000/surgeons/${id}`, {method: 'DELETE'})
+    const res = await fetch(`https://172.18.0.3:8000/surgeons/${id}`, {method: 'DELETE'})
     if (!res.ok) {
         throw new Error(`This is an HTTP error: The status is ${res.status}`);
     }
