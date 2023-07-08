@@ -4,32 +4,32 @@ import { createContext } from "react";
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-    const [ username, setUsername ] = useState(sessionStorage.username);
-    const [ userType, setUserType ] = useState(sessionStorage.userType);
-    const [ id, setId ] = useState(sessionStorage.id);
+    const [ username, setUsername ] = useState(localStorage.username);
+    const [ userType, setUserType ] = useState(localStorage.userType);
+    const [ id, setId ] = useState(localStorage.id);
 
 
     useEffect(() => {
         if(username) {
-            sessionStorage.username = username;
+            localStorage.username = username;
         } else {
-            delete sessionStorage.username; 
+            delete localStorage.username; 
         }
     }, [ username ]);
 
     useEffect(() => {
         if(userType) {
-            sessionStorage.userType = userType;
+            localStorage.userType = userType;
         } else {
-            delete sessionStorage.userType; 
+            delete localStorage.userType; 
         }
     }, [ userType ]);
 
     useEffect(() => {
         if(id) {
-            sessionStorage.id = id;
+            localStorage.id = id;
         } else {
-            delete sessionStorage.id; 
+            delete localStorage.id; 
         }
     }, [ id ]);
 
