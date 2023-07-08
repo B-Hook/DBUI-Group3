@@ -1,6 +1,7 @@
+require('dotenv').config({ path: __dirname + '/.env' })
 const express = require('express')
 const app = express()
-const port = 8000
+//const port = 8000
 
 // Enable Cross-Origin Resource Sharing
 const cors = require('cors')
@@ -12,10 +13,11 @@ app.use(express.json())
 // Connect to mysql
 const mysql = require('mysql')
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'CoolPasswordThanks',
-  database: 'DBUI'
+  host: process.env.MYSQL_CLOUD_HOST,
+  port: process.env.MYSQL_PORT,
+  user: process.env.MYSQL_CLOUD_USER,
+  password: process.env.MYSQL_CLOUD_PASS,
+  database: process.env.MYSQL_DB
 });
 
 connection.connect()
